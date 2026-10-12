@@ -13,3 +13,7 @@ Statische Entwürfe (keine Funktion), im Stil der [Morphologischen Matrix](https
 | 7 | Mobile Ansicht des Backlogs | `s7-mobil.png` |
 
 Beispieldaten: fiktives Projekt „Food-Truck Bestell-App“ (angelehnt an das Beispiel *Food-Truck gründen* der Matrix-App).
+
+## Abgrenzung
+
+Die App unterstützt die **Methodik** (Standardformat, 3Cs, INVEST, Akzeptanzkriterien, Definition of Ready/Done, Aufteilen) und ist **kein Projektmanagement-Werkzeug**: keine Sprints, keine Velocity, keine Zuständigkeiten oder WIP-Limits. Story Points dienen nur der INVEST-Prüfung („Estimable“, „Small“). Der Status-Fluss im Board bildet die Abarbeitung einer Story ab (Entwurf → Bereit → In Arbeit → Review → Fertig).
