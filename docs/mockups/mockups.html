@@ -1,0 +1,547 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>User Stories – Mockups</title>
+<style>
+  /* Tokens übernommen aus morphological-matrix-app (css/tokens.css) */
+  :root {
+    --bg: #f6f7f9; --surface: #fff; --surface-2: #f2f4f7; --surface-3: #eaedf2;
+    --text: #101828; --text-2: #344054; --muted: #667085;
+    --border: #e4e7ec; --border-strong: #d0d5dd;
+    --accent: #4f46e5; --accent-hover: #4338ca; --accent-soft: #eef2ff; --accent-contrast: #fff;
+    --bad: #c92a2a; --bad-bg: #fff0f0; --warn: #a35200; --warn-bg: #fff4e0; --good: #2b8a3e; --good-bg: #e6f7ea;
+    --prio-must: #c92a2a; --prio-must-bg: #ffe3e3; --prio-should: #a35200; --prio-should-bg: #fff0d6;
+    --prio-could: #1864ab; --prio-could-bg: #dbeafe; --prio-wont: #495057; --prio-wont-bg: #e9ecef;
+    --radius: 12px; --radius-sm: 7px;
+    --shadow-xs: 0 1px 2px rgba(16,24,40,.05);
+    --shadow: 0 1px 3px rgba(16,24,40,.08), 0 1px 2px rgba(16,24,40,.04);
+    --shadow-lg: 0 12px 32px -8px rgba(16,24,40,.18), 0 4px 8px -4px rgba(16,24,40,.06);
+    --gutter: 20px;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #d9dde4; color: var(--text); font: 14px/1.45 Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+  button, input, textarea, select { font: inherit; color: inherit; }
+  svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+
+  .screen { width: 1280px; margin: 32px auto; background: var(--bg); border-radius: 10px; overflow: hidden; box-shadow: var(--shadow-lg); position: relative; }
+  .screen.mobile { width: 390px; }
+  .caption { width: 1280px; margin: 40px auto -20px; font-weight: 700; color: #344054; }
+
+  /* Kopfzeile */
+  .app-header { position: relative; display: flex; align-items: center; gap: 16px; min-height: 56px; padding: 8px var(--gutter); background: var(--surface); border-bottom: 1px solid var(--border); }
+  .app-header::before { content: ""; position: absolute; inset: 0 0 auto 0; height: 2px; background: linear-gradient(90deg, var(--accent), #06b6d4 55%, #22c55e); }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; }
+  .logo { width: 28px; height: 28px; display: grid; place-items: center; border-radius: 8px; background: var(--accent); color: #fff; font-size: 13px; font-weight: 800; box-shadow: 0 2px 6px color-mix(in srgb, var(--accent) 40%, transparent); }
+  .tabs { display: flex; gap: 4px; flex: 1; }
+  .tab { height: 36px; padding: 0 12px; display: flex; align-items: center; gap: 6px; border-radius: 9px; color: var(--muted); font-weight: 550; border: 1px solid transparent; }
+  .tab.active { background: var(--surface); border-color: var(--border); box-shadow: var(--shadow-xs); color: var(--text); font-weight: 650; position: relative; }
+  .tab.active::after { content: ""; position: absolute; left: 10px; right: 10px; bottom: -1px; height: 2px; border-radius: 2px; background: var(--accent); }
+  .tab .x { color: var(--muted); font-size: 12px; margin-left: 4px; }
+  .hdr-actions { display: flex; gap: 8px; align-items: center; }
+
+  .btn { display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 12px; border-radius: 8px; border: 1px solid var(--border-strong); background: var(--surface); font-weight: 600; color: var(--text-2); box-shadow: var(--shadow-xs); white-space: nowrap; }
+  .btn.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .btn.ghost { border-color: transparent; background: transparent; box-shadow: none; }
+  .btn.sm { height: 28px; padding: 0 9px; font-size: 12.5px; }
+  .seg { display: inline-flex; background: var(--surface-2); border: 1px solid var(--border); border-radius: 9px; padding: 2px; }
+  .seg span { padding: 5px 12px; border-radius: 7px; color: var(--muted); font-weight: 600; font-size: 13px; }
+  .seg span.on { background: var(--surface); color: var(--text); box-shadow: var(--shadow-xs); }
+
+  main { padding: 20px var(--gutter) 28px; }
+  h1 { font-size: 22px; letter-spacing: -.02em; margin: 0; }
+  h2 { font-size: 15px; margin: 0 0 10px; }
+  h3 { font-size: 13px; margin: 0 0 8px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); }
+  .sub { color: var(--muted); }
+  .row { display: flex; gap: 12px; align-items: center; }
+  .spacer { flex: 1; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); }
+  .pad { padding: 16px; }
+
+  /* Kennzahlen */
+  .kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 16px 0; }
+  .kpi { padding: 12px 14px; }
+  .kpi small { color: var(--muted); font-weight: 600; font-size: 12px; }
+  .kpi b { display: block; font-size: 24px; letter-spacing: -.02em; margin: 2px 0; }
+  .kpi span { color: var(--muted); font-size: 12px; }
+
+  /* Chips & Badges */
+  .chip { display: inline-flex; align-items: center; gap: 4px; height: 22px; padding: 0 8px; border-radius: 999px; font-size: 12px; font-weight: 600; background: var(--surface-2); color: var(--text-2); border: 1px solid var(--border); white-space: nowrap; }
+  .chip.must { background: var(--prio-must-bg); color: var(--prio-must); border-color: transparent; }
+  .chip.should { background: var(--prio-should-bg); color: var(--prio-should); border-color: transparent; }
+  .chip.could { background: var(--prio-could-bg); color: var(--prio-could); border-color: transparent; }
+  .chip.wont { background: var(--prio-wont-bg); color: var(--prio-wont); border-color: transparent; }
+  .chip.good { background: var(--good-bg); color: var(--good); border-color: transparent; }
+  .chip.warn { background: var(--warn-bg); color: var(--warn); border-color: transparent; }
+  .chip.bad { background: var(--bad-bg); color: var(--bad); border-color: transparent; }
+  .chip.acc { background: var(--accent-soft); color: var(--accent); border-color: transparent; }
+  .pts { display: inline-grid; place-items: center; min-width: 26px; height: 22px; padding: 0 6px; border-radius: 6px; background: var(--surface-3); font-weight: 700; font-size: 12px; color: var(--text-2); }
+  .id { font: 600 12px ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--muted); }
+
+  /* INVEST-Leiste: 6 Kästchen */
+  .invest { display: inline-flex; gap: 2px; }
+  .invest i { font-style: normal; width: 17px; height: 20px; display: grid; place-items: center; border-radius: 4px; font-size: 10.5px; font-weight: 800; }
+  .invest .y { background: var(--good-bg); color: var(--good); }
+  .invest .n { background: var(--bad-bg); color: var(--bad); }
+  .invest .q { background: var(--warn-bg); color: var(--warn); }
+  .invest .o { background: var(--surface-3); color: #98a2b3; }
+
+  .progress { height: 6px; background: var(--surface-3); border-radius: 99px; overflow: hidden; display: flex; }
+  .progress > span { display: block; height: 100%; }
+
+  /* Projektübersicht */
+  .projects { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 18px; }
+  .proj { padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+  .proj-head { display: flex; gap: 12px; align-items: flex-start; }
+  .proj-icon { width: 40px; height: 40px; border-radius: 10px; display: grid; place-items: center; font-weight: 800; color: #fff; }
+  .proj h2 { margin: 0; }
+  .proj .meta { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .proj .meta div { background: var(--surface-2); border-radius: 8px; padding: 8px 10px; }
+  .proj .meta b { display: block; font-size: 17px; }
+  .proj .meta small { color: var(--muted); font-size: 11.5px; }
+  .legend { display: flex; gap: 12px; font-size: 12px; color: var(--muted); flex-wrap: wrap; }
+  .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 4px; }
+  .proj.new { border: 2px dashed var(--border-strong); background: transparent; box-shadow: none; align-items: center; justify-content: center; color: var(--muted); min-height: 240px; font-weight: 600; }
+
+  /* Backlog */
+  .layout { display: grid; grid-template-columns: 1fr 300px; gap: 16px; }
+  .toolbar { display: flex; gap: 8px; align-items: center; margin-bottom: 12px; flex-wrap: wrap; }
+  .search { flex: 0 1 260px; height: 34px; border: 1px solid var(--border-strong); border-radius: 8px; padding: 0 10px; display: flex; align-items: center; gap: 6px; color: var(--muted); background: var(--surface); }
+  .epic { margin-bottom: 14px; overflow: hidden; }
+  .epic-head { display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: var(--surface-2); border-bottom: 1px solid var(--border); font-weight: 650; }
+  .epic-head .bar { width: 4px; height: 18px; border-radius: 2px; }
+  .story { display: grid; grid-template-columns: 18px 64px 1fr 120px 92px 72px 34px; gap: 10px; align-items: center; padding: 9px 14px; border-bottom: 1px solid var(--border); }
+  .story:last-child { border-bottom: 0; }
+  .story.sel { background: var(--accent-soft); box-shadow: inset 3px 0 0 var(--accent); }
+  .grip { color: #c0c6d0; letter-spacing: -2px; font-weight: 800; }
+  .story .text { color: var(--text-2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .story .text b { color: var(--text); font-weight: 600; }
+  .kw { color: var(--muted); font-weight: 500; }
+  .side .card { margin-bottom: 12px; }
+  .stat-row { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px dashed var(--border); font-size: 13px; }
+  .stat-row:last-child { border: 0; }
+  .hint { display: flex; gap: 8px; padding: 9px 10px; border-radius: 8px; background: var(--warn-bg); color: var(--warn); font-size: 12.5px; margin-top: 8px; }
+  .hint.good { background: var(--good-bg); color: var(--good); }
+
+  /* Story-Editor */
+  .editor { display: grid; grid-template-columns: 1fr 330px; gap: 16px; }
+  .crumbs { color: var(--muted); font-size: 13px; margin-bottom: 6px; }
+  .threec { display: flex; gap: 0; border-bottom: 1px solid var(--border); margin: 0 -16px 16px; padding: 0 16px; }
+  .threec span { padding: 10px 14px; font-weight: 600; color: var(--muted); border-bottom: 2px solid transparent; display: flex; gap: 8px; align-items: center; }
+  .threec span.on { color: var(--accent); border-color: var(--accent); }
+  .threec em { font-style: normal; font-size: 11px; background: var(--surface-3); color: var(--text-2); border-radius: 99px; padding: 0 7px; }
+  .fmt { display: grid; grid-template-columns: 110px 1fr; gap: 8px 12px; align-items: center; }
+  .fmt label { font-weight: 700; color: var(--accent); text-align: right; }
+  .input { border: 1px solid var(--border-strong); border-radius: 8px; padding: 8px 10px; background: var(--surface); min-height: 38px; }
+  .input.focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+  .input.warn { border-color: #f0b35b; }
+  .field-hint { grid-column: 2; font-size: 12px; color: var(--warn); margin-top: -4px; }
+  .preview { margin-top: 16px; padding: 14px 16px; border-radius: 10px; background: linear-gradient(135deg, #fffdf4, #fff8e1); border: 1px solid #f3e3a8; font-size: 15px; line-height: 1.55; box-shadow: 2px 3px 0 #f3e3a8; }
+  .preview .kw { color: #8a6d00; font-weight: 700; }
+  .props { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 16px; }
+  .props .input { display: flex; align-items: center; justify-content: space-between; }
+  .props small { display: block; color: var(--muted); font-size: 11.5px; font-weight: 600; margin-bottom: 4px; }
+  .ac { border: 1px solid var(--border); border-radius: 10px; margin-bottom: 8px; overflow: hidden; }
+  .ac-head { display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: var(--surface-2); font-weight: 600; }
+  .ac-body { padding: 8px 12px 10px; display: grid; grid-template-columns: 80px 1fr; gap: 4px 10px; }
+  .ac-body b { color: var(--accent); font-size: 12.5px; text-transform: uppercase; letter-spacing: .03em; padding-top: 1px; }
+  .check { width: 16px; height: 16px; border-radius: 4px; border: 1.5px solid var(--border-strong); display: inline-grid; place-items: center; background: var(--surface); flex: none; }
+  .check.on { background: var(--good); border-color: var(--good); color: #fff; font-size: 11px; font-weight: 800; }
+  .conv { display: flex; gap: 10px; padding: 8px 0; border-bottom: 1px dashed var(--border); }
+  .conv:last-child { border: 0; }
+  .avatar { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; color: #fff; font-size: 11px; font-weight: 700; flex: none; }
+  .conv small { color: var(--muted); }
+  .q { color: var(--warn); font-weight: 600; }
+
+  .inv-item { display: grid; grid-template-columns: 30px 1fr auto; gap: 10px; align-items: start; padding: 9px 0; border-bottom: 1px solid var(--border); }
+  .inv-item:last-child { border: 0; }
+  .inv-letter { width: 30px; height: 30px; border-radius: 8px; display: grid; place-items: center; font-weight: 800; font-size: 15px; }
+  .inv-item p { margin: 2px 0 0; font-size: 12px; color: var(--muted); }
+  .score { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+  .ring { width: 54px; height: 54px; border-radius: 50%; display: grid; place-items: center; background: conic-gradient(var(--good) 0 83%, var(--surface-3) 0); }
+  .ring b { width: 42px; height: 42px; border-radius: 50%; background: var(--surface); display: grid; place-items: center; font-size: 14px; }
+
+  /* Board */
+  .board { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; align-items: start; }
+  .col { background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius); padding: 10px; min-height: 520px; }
+  .col-head { display: flex; align-items: center; gap: 8px; font-weight: 700; margin: 2px 2px 10px; }
+  .col-head .n { color: var(--muted); font-weight: 600; font-size: 12px; }
+  .col-head .wip { margin-left: auto; font-size: 11.5px; color: var(--muted); font-weight: 600; }
+  .col-head .wip.over { color: var(--bad); }
+  .tcard { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 10px; margin-bottom: 8px; box-shadow: var(--shadow-xs); }
+  .tcard .t { font-weight: 600; margin: 4px 0 8px; font-size: 13px; line-height: 1.35; }
+  .tcard .f { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); }
+  .tcard.drag { transform: rotate(-2deg); box-shadow: var(--shadow-lg); border-color: var(--accent); }
+  .gate { font-size: 11.5px; padding: 6px 8px; border-radius: 7px; margin: -2px 0 10px; }
+  .gate.dor { background: var(--accent-soft); color: var(--accent); }
+  .gate.dod { background: var(--good-bg); color: var(--good); }
+  .mini-ac { display: flex; gap: 2px; margin-left: auto; }
+  .mini-ac span { width: 10px; height: 4px; border-radius: 2px; background: var(--surface-3); }
+  .mini-ac span.on { background: var(--good); }
+  .popover { position: absolute; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; box-shadow: var(--shadow-lg); padding: 14px; width: 300px; }
+
+  /* Mobil */
+  .m-header { display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: var(--surface); border-bottom: 1px solid var(--border); position: relative; }
+  .m-header::before { content: ""; position: absolute; inset: 0 0 auto 0; height: 2px; background: linear-gradient(90deg, var(--accent), #06b6d4 55%, #22c55e); }
+  .m-story { padding: 12px 14px; background: var(--surface); border-bottom: 1px solid var(--border); }
+  .m-nav { display: grid; grid-template-columns: repeat(4, 1fr); background: var(--surface); border-top: 1px solid var(--border); padding: 8px 0 14px; text-align: center; font-size: 11px; color: var(--muted); font-weight: 600; }
+  .m-nav .on { color: var(--accent); }
+</style>
+</head>
+<body>
+
+<!-- ============ 1 Projektübersicht ============ -->
+<div class="caption">1 · Projektübersicht</div>
+<section class="screen" id="s1-projekte">
+  <header class="app-header">
+    <div class="brand"><span class="logo">US</span> User Stories</div>
+    <div class="tabs"><span class="tab active">Alle Projekte</span><span class="tab">Food-Truck Bestell-App <span class="x">✕</span></span><span class="tab">Vereinsportal <span class="x">✕</span></span><span class="tab" style="font-size:18px">+</span></div>
+    <div class="hdr-actions"><button class="btn ghost">Datei ▾</button><button class="btn ghost">DE</button></div>
+  </header>
+  <main>
+    <div class="row">
+      <div><h1>Meine Projekte</h1><div class="sub">3 Projekte · 74 User Stories · zuletzt bearbeitet heute, 14:32</div></div>
+      <span class="spacer"></span>
+      <button class="btn">Beispiel öffnen …</button>
+      <button class="btn">Importieren (JSON)</button>
+      <button class="btn primary">+ Neues Projekt</button>
+    </div>
+
+    <div class="projects">
+      <div class="card proj">
+        <div class="proj-head">
+          <div class="proj-icon" style="background:#f59f00">FT</div>
+          <div style="flex:1"><h2>Food-Truck Bestell-App</h2><div class="sub" style="font-size:12.5px">Vorbestellen, bezahlen, abholen – ohne Schlange</div></div>
+          <span class="chip acc">Sprint 5</span>
+        </div>
+        <div class="meta">
+          <div><b>31</b><small>Stories</small></div>
+          <div><b>118</b><small>Story Points</small></div>
+          <div><b style="color:var(--good)">87 %</b><small>INVEST-konform</small></div>
+        </div>
+        <div>
+          <div class="progress"><span style="width:35%;background:var(--good)"></span><span style="width:12%;background:#06b6d4"></span><span style="width:16%;background:var(--accent)"></span><span style="width:18%;background:#a5b4fc"></span></div>
+          <div class="legend" style="margin-top:6px"><span><i class="dot" style="background:var(--good)"></i>Fertig 11</span><span><i class="dot" style="background:#06b6d4"></i>In Arbeit 4</span><span><i class="dot" style="background:var(--accent)"></i>Bereit 5</span><span><i class="dot" style="background:#a5b4fc"></i>Entwurf 6</span><span><i class="dot" style="background:var(--surface-3)"></i>Idee 5</span></div>
+        </div>
+        <div class="hint">⚠ 2 Stories im Sprint ohne Akzeptanzkriterien</div>
+      </div>
+
+      <div class="card proj">
+        <div class="proj-head">
+          <div class="proj-icon" style="background:#4f46e5">VP</div>
+          <div style="flex:1"><h2>Vereinsportal</h2><div class="sub" style="font-size:12.5px">Mitglieder, Beiträge und Termine digital verwalten</div></div>
+          <span class="chip">Discovery</span>
+        </div>
+        <div class="meta">
+          <div><b>28</b><small>Stories</small></div>
+          <div><b>64</b><small>Story Points</small></div>
+          <div><b style="color:var(--warn)">61 %</b><small>INVEST-konform</small></div>
+        </div>
+        <div>
+          <div class="progress"><span style="width:7%;background:var(--good)"></span><span style="width:4%;background:#06b6d4"></span><span style="width:21%;background:var(--accent)"></span><span style="width:39%;background:#a5b4fc"></span></div>
+          <div class="legend" style="margin-top:6px"><span><i class="dot" style="background:var(--good)"></i>Fertig 2</span><span><i class="dot" style="background:#06b6d4"></i>In Arbeit 1</span><span><i class="dot" style="background:var(--accent)"></i>Bereit 6</span><span><i class="dot" style="background:#a5b4fc"></i>Entwurf 11</span><span><i class="dot" style="background:var(--surface-3)"></i>Idee 8</span></div>
+        </div>
+        <div class="hint">⚠ 5 Stories zu groß (&gt; 13 SP) – Aufteilen empfohlen</div>
+      </div>
+
+      <div class="card proj">
+        <div class="proj-head">
+          <div class="proj-icon" style="background:#2b8a3e">LV</div>
+          <div style="flex:1"><h2>Lastenrad-Verleih</h2><div class="sub" style="font-size:12.5px">Räder finden, buchen, Schloss per App öffnen</div></div>
+          <span class="chip good">Release 1.0 ✓</span>
+        </div>
+        <div class="meta">
+          <div><b>15</b><small>Stories</small></div>
+          <div><b>52</b><small>Story Points</small></div>
+          <div><b style="color:var(--good)">100 %</b><small>INVEST-konform</small></div>
+        </div>
+        <div>
+          <div class="progress"><span style="width:87%;background:var(--good)"></span><span style="width:13%;background:var(--accent)"></span></div>
+          <div class="legend" style="margin-top:6px"><span><i class="dot" style="background:var(--good)"></i>Fertig 13</span><span><i class="dot" style="background:var(--accent)"></i>Bereit 2</span></div>
+        </div>
+        <div class="hint good">✓ Alle Stories erfüllen die Definition of Ready</div>
+      </div>
+    </div>
+
+    <div class="projects" style="grid-template-columns: 1fr 2fr">
+      <div class="proj new">+ Neues Projekt anlegen<br><small style="font-weight:500">leer, aus Vorlage oder Beispiel</small></div>
+      <div class="card pad">
+        <h2>Zuletzt bearbeitet</h2>
+        <div class="stat-row"><span><span class="id">FT-23</span> &nbsp;Vorbestellung per Handy aufgeben</span><span class="sub">Food-Truck · heute 14:32</span></div>
+        <div class="stat-row"><span><span class="id">VP-08</span> &nbsp;Beitragsstatus einsehen</span><span class="sub">Vereinsportal · heute 11:05</span></div>
+        <div class="stat-row"><span><span class="id">FT-19</span> &nbsp;Abholnummer aufs Handy</span><span class="sub">Food-Truck · gestern</span></div>
+        <div class="stat-row"><span><span class="id">VP-14</span> &nbsp;Trainingstermine abonnieren</span><span class="sub">Vereinsportal · Mo</span></div>
+      </div>
+    </div>
+  </main>
+</section>
+
+<!-- ============ 2 Backlog ============ -->
+<div class="caption">2 · Backlog eines Projekts (Pflege &amp; Priorisierung)</div>
+<section class="screen" id="s2-backlog">
+  <header class="app-header">
+    <div class="brand"><span class="logo">US</span></div>
+    <div class="tabs"><span class="tab">Alle Projekte</span><span class="tab active">Food-Truck Bestell-App <span class="x">✕</span></span><span class="tab">Vereinsportal <span class="x">✕</span></span><span class="tab" style="font-size:18px">+</span></div>
+    <div class="seg"><span class="on">Backlog</span><span>Board</span><span>Epics</span><span>Bericht</span></div>
+    <div class="hdr-actions"><button class="btn ghost">Datei ▾</button></div>
+  </header>
+  <main>
+    <div class="toolbar">
+      <div class="search">⌕ Stories durchsuchen …</div>
+      <span class="chip">Status: alle ▾</span><span class="chip">Priorität ▾</span><span class="chip">Epic ▾</span><span class="chip warn">⚠ INVEST-Probleme (4)</span>
+      <span class="spacer"></span>
+      <span class="sub" style="font-size:12.5px">Gruppieren:</span><div class="seg"><span class="on">Epic</span><span>Status</span><span>Keine</span></div>
+      <button class="btn primary">+ User Story</button>
+    </div>
+
+    <div class="layout">
+      <div>
+        <div class="card epic">
+          <div class="epic-head"><span class="bar" style="background:#f59f00"></span>Bestellen <span class="sub" style="font-weight:500">· 6 Stories · 26 SP</span><span class="spacer"></span><div class="progress" style="width:120px"><span style="width:40%;background:var(--good)"></span></div><span class="sub" style="font-size:12px">40 %</span></div>
+          <div class="story sel"><span class="grip">⋮⋮</span><span class="id">FT-23</span><span class="text"><span class="kw">Als</span> <b>hungriger Gast</b> <span class="kw">möchte ich</span> <b>meine Bestellung vorab per Handy aufgeben</b>, <span class="kw">damit</span> ich nicht in der Schlange warte</span><span class="invest"><i class="y">I</i><i class="y">N</i><i class="y">V</i><i class="y">E</i><i class="y">S</i><i class="q">T</i></span><span><span class="chip must">Must</span></span><span class="chip acc">Bereit</span><span class="pts">5</span></div>
+          <div class="story"><span class="grip">⋮⋮</span><span class="id">FT-24</span><span class="text"><span class="kw">Als</span> <b>Gast</b> <span class="kw">möchte ich</span> <b>mit Apple/Google Pay bezahlen</b>, <span class="kw">damit</span> ich kein Bargeld brauche</span><span class="invest"><i class="y">I</i><i class="y">N</i><i class="y">V</i><i class="y">E</i><i class="y">S</i><i class="y">T</i></span><span><span class="chip must">Must</span></span><span class="chip" style="background:#cffafe;color:#0e7490;border:0">In Arbeit</span><span class="pts">8</span></div>
+          <div class="story"><span class="grip">⋮⋮</span><span class="id">FT-19</span><span class="text"><span class="kw">Als</span> <b>Gast</b> <span class="kw">möchte ich</span> <b>eine Abholnummer aufs Handy bekommen</b>, <span class="kw">damit</span> ich weiß, wann mein Essen fertig ist</span><span class="invest"><i class="y">I</i><i class="y">N</i><i class="y">V</i><i class="y">E</i><i class="y">S</i><i class="y">T</i></span><span><span class="chip should">Should</span></span><span class="chip good">Fertig</span><span class="pts">3</span></div>
+          <div class="story"><span class="grip">⋮⋮</span><span class="id">FT-27</span><span class="text"><span class="kw">Als</span> <b>Stammgast</b> <span class="kw">möchte ich</span> <b>meine Lieblingsbestellung speichern</b>, <span class="kw">damit</span> ich mit einem Tipp nachbestellen kann</span><span class="invest"><i class="n">I</i><i class="y">N</i><i class="y">V</i><i class="y">E</i><i class="y">S</i><i class="n">T</i></span><span><span class="chip could">Could</span></span><span class="chip">Entwurf</span><span class="pts">?</span></div>
+          <div class="story"><span class="grip">⋮⋮</span><span class="id">FT-31</span><span class="text"><span class="kw">Als</span> <b>Nutzer</b> <span class="kw">möchte ich</span> <b>dass die App eine PostgreSQL-Datenbank verwendet</b> <span class="kw" style="color:var(--bad)">– damit …?</span></span><span class="invest"><i class="y">I</i><i class="n">N</i><i class="n">V</i><i class="q">E</i><i class="y">S</i><i class="n">T</i></span><span><span class="chip wont">Won't</span></span><span class="chip">Idee</span><span class="pts">?</span></div>
+        </div>
+
+        <div class="card epic">
+          <div class="epic-head"><span class="bar" style="background:#4f46e5"></span>Küche &amp; Ausgabe <span class="sub" style="font-weight:500">· 4 Stories · 21 SP</span><span class="spacer"></span><div class="progress" style="width:120px"><span style="width:25%;background:var(--good)"></span></div><span class="sub" style="font-size:12px">25 %</span></div>
+          <div class="story"><span class="grip">⋮⋮</span><span class="id">FT-11</span><span class="text"><span class="kw">Als</span> <b>Koch</b> <span class="kw">möchte ich</span> <b>eingehende Bestellungen in Reihenfolge sehen</b>, <span class="kw">damit</span> nichts vergessen wird</span><span class="invest"><i class="y">I</i><i class="y">N</i><i class="y">V</i><i class="y">E</i><i class="y">S</i><i class="y">T</i></span><span><span class="chip must">Must</span></span><span class="chip" style="background:#cffafe;color:#0e7490;border:0">Review</span><span class="pts">5</span></div>
+          <div class="story"><span class="grip">⋮⋮</span><span class="id">FT-14</span><span class="text"><span class="kw">Als</span> <b>Betreiberin</b> <span class="kw">möchte ich</span> <b>ausverkaufte Gerichte sperren</b>, <span class="kw">damit</span> niemand Unverfügbares bestellt</span><span class="invest"><i class="y">I</i><i class="y">N</i><i class="y">V</i><i class="y">E</i><i class="y">S</i><i class="y">T</i></span><span><span class="chip should">Should</span></span><span class="chip acc">Bereit</span><span class="pts">3</span></div>
+          <div class="story"><span class="grip">⋮⋮</span><span class="id">FT-16</span><span class="text"><span class="kw">Als</span> <b>Betreiberin</b> <span class="kw">möchte ich</span> <b>Statistiken, Lager, Personalplanung und Kassenabschluss</b> …</span><span class="invest"><i class="o">I</i><i class="y">N</i><i class="y">V</i><i class="n">E</i><i class="n">S</i><i class="q">T</i></span><span><span class="chip could">Could</span></span><span class="chip">Entwurf</span><span class="pts" style="background:var(--bad-bg);color:var(--bad)">40</span></div>
+        </div>
+      </div>
+
+      <aside class="side">
+        <div class="card pad">
+          <h3>Backlog-Gesundheit</h3>
+          <div class="stat-row"><span>Stories gesamt</span><b>31</b></div>
+          <div class="stat-row"><span>Story Points (geschätzt)</span><b>118 <span class="sub" style="font-weight:500">· 4 offen</span></b></div>
+          <div class="stat-row"><span>Bereit für Sprint (DoR)</span><b style="color:var(--good)">5 · 21 SP</b></div>
+          <div class="stat-row"><span>Ø Akzeptanzkriterien</span><b>3,2</b></div>
+          <div class="stat-row"><span>Velocity (Ø 3 Sprints)</span><b>19 SP</b></div>
+        </div>
+        <div class="card pad">
+          <h3>INVEST im Projekt</h3>
+          <div class="stat-row"><span><b>I</b>ndependent</span><span>28 / 31</span></div>
+          <div class="stat-row"><span><b>N</b>egotiable</span><span>30 / 31</span></div>
+          <div class="stat-row"><span><b>V</b>aluable</span><span>29 / 31</span></div>
+          <div class="stat-row"><span><b>E</b>stimable</span><span style="color:var(--warn)">27 / 31</span></div>
+          <div class="stat-row"><span><b>S</b>mall</span><span>30 / 31</span></div>
+          <div class="stat-row"><span><b>T</b>estable</span><span style="color:var(--warn)">27 / 31</span></div>
+          <div class="hint">FT-16 ist ein Epic im Story-Gewand (40 SP). <u>Aufteilen …</u></div>
+          <div class="hint">FT-31 hat kein „damit“ – welcher Nutzen?</div>
+        </div>
+        <div class="card pad">
+          <h3>Legende</h3>
+          <div class="legend" style="gap:8px">
+            <span class="invest"><i class="y">✓</i></span>erfüllt
+            <span class="invest"><i class="q">?</i></span>prüfen
+            <span class="invest"><i class="n">✕</i></span>verletzt
+            <span class="invest"><i class="o">–</i></span>ungeprüft
+          </div>
+        </div>
+      </aside>
+    </div>
+  </main>
+</section>
+
+<!-- ============ 3 Story-Editor: Card ============ -->
+<div class="caption">3 · Story bearbeiten – Card (Standardformat) &amp; INVEST-Check</div>
+<section class="screen" id="s3-card">
+  <header class="app-header">
+    <div class="brand"><span class="logo">US</span></div>
+    <div class="tabs"><span class="tab">Alle Projekte</span><span class="tab active">Food-Truck Bestell-App <span class="x">✕</span></span><span class="tab">Vereinsportal <span class="x">✕</span></span></div>
+    <div class="seg"><span class="on">Backlog</span><span>Board</span><span>Epics</span><span>Bericht</span></div>
+  </header>
+  <main>
+    <div class="crumbs">Backlog › Epic „Bestellen“ › <span class="id">FT-23</span></div>
+    <div class="row" style="margin-bottom:14px">
+      <h1>Vorbestellung per Handy aufgeben</h1>
+      <span class="chip acc">Bereit</span><span class="spacer"></span>
+      <button class="btn">‹ FT-24</button><button class="btn">FT-27 ›</button><button class="btn">Aufteilen …</button><button class="btn">⋯</button>
+    </div>
+    <div class="editor">
+      <div class="card pad">
+        <div class="threec">
+          <span class="on">① Card</span>
+          <span>② Conversation <em>4</em></span>
+          <span>③ Confirmation <em>4 AK</em></span>
+        </div>
+        <div class="fmt">
+          <label>Als</label><div class="input">hungriger Gast <span class="sub" style="float:right;font-size:12px">Rolle · aus Personas ▾</span></div>
+          <label>möchte ich</label><div class="input focus">meine Bestellung vorab per Handy aufgeben|</div>
+          <label>damit</label><div class="input">ich nicht in der Schlange warten muss.</div>
+        </div>
+        <div class="preview"><span class="kw">Als</span> hungriger Gast <span class="kw">möchte ich</span> meine Bestellung vorab per Handy aufgeben, <span class="kw">damit</span> ich nicht in der Schlange warten muss.</div>
+
+        <div class="props">
+          <div><small>Story Points</small><div class="input"><b>5</b><span class="sub">1 2 3 <b style="color:var(--accent)">5</b> 8 13 ?</span></div></div>
+          <div><small>Priorität</small><div class="input"><span class="chip must">Must have</span><span class="sub">▾</span></div></div>
+          <div><small>Epic</small><div class="input"><span><span class="dot" style="background:#f59f00"></span>Bestellen</span><span class="sub">▾</span></div></div>
+          <div><small>Sprint / Release</small><div class="input"><span>Sprint 5</span><span class="sub">▾</span></div></div>
+        </div>
+        <div style="margin-top:14px">
+          <small class="sub" style="font-weight:600;font-size:11.5px">Abhängigkeiten</small>
+          <div class="row" style="margin-top:4px;gap:6px"><span class="chip">blockiert von <b class="id" style="margin-left:4px">FT-24</b> Bezahlen</span><span class="chip">+ hinzufügen</span></div>
+        </div>
+        <div style="margin-top:14px">
+          <small class="sub" style="font-weight:600;font-size:11.5px">Notiz / Beschreibung (optional)</small>
+          <div class="input" style="min-height:60px;margin-top:4px;color:var(--muted)">Vorbestellung nur während der Öffnungszeiten des Standorts. Mindestvorlauf 10 Minuten.</div>
+        </div>
+      </div>
+
+      <aside>
+        <div class="card pad" style="margin-bottom:12px">
+          <div class="score"><div class="ring"><b>5/6</b></div><div><b>INVEST-Check</b><div class="sub" style="font-size:12.5px">Automatische Hinweise + eigene Bestätigung</div></div></div>
+          <div class="inv-item"><span class="inv-letter" style="background:var(--good-bg);color:var(--good)">I</span><div><b>Independent</b><p>1 Abhängigkeit (FT-24) – liegt im selben Sprint.</p></div><span class="check on">✓</span></div>
+          <div class="inv-item"><span class="inv-letter" style="background:var(--good-bg);color:var(--good)">N</span><div><b>Negotiable</b><p>Keine Technik-Vorgaben im Text gefunden.</p></div><span class="check on">✓</span></div>
+          <div class="inv-item"><span class="inv-letter" style="background:var(--good-bg);color:var(--good)">V</span><div><b>Valuable</b><p>Nutzen („damit …“) ist angegeben.</p></div><span class="check on">✓</span></div>
+          <div class="inv-item"><span class="inv-letter" style="background:var(--good-bg);color:var(--good)">E</span><div><b>Estimable</b><p>Geschätzt (5 SP), keine offenen Fragen.</p></div><span class="check on">✓</span></div>
+          <div class="inv-item"><span class="inv-letter" style="background:var(--good-bg);color:var(--good)">S</span><div><b>Small</b><p>5 SP ≤ Grenze 8 SP (passt in einen Sprint).</p></div><span class="check on">✓</span></div>
+          <div class="inv-item"><span class="inv-letter" style="background:var(--warn-bg);color:var(--warn)">T</span><div><b>Testable</b><p>4 Akzeptanzkriterien, aber eines ohne „Dann“. <u>Ansehen</u></p></div><span class="check"></span></div>
+        </div>
+        <div class="card pad">
+          <h3>Definition of Ready</h3>
+          <div class="stat-row"><span><span class="check on">✓</span> Standardformat vollständig</span></div>
+          <div class="stat-row"><span><span class="check on">✓</span> Mind. 1 Akzeptanzkriterium</span></div>
+          <div class="stat-row"><span><span class="check on">✓</span> Geschätzt</span></div>
+          <div class="stat-row"><span><span class="check"></span> Mit PO besprochen</span></div>
+          <div class="sub" style="font-size:12px;margin-top:6px">Checkliste je Projekt anpassbar</div>
+        </div>
+      </aside>
+    </div>
+  </main>
+</section>
+
+<!-- ============ 4 Conversation & Confirmation ============ -->
+<div class="caption">4 · Story bearbeiten – Conversation &amp; Confirmation (Akzeptanzkriterien)</div>
+<section class="screen" id="s4-ac">
+  <header class="app-header">
+    <div class="brand"><span class="logo">US</span></div>
+    <div class="tabs"><span class="tab">Alle Projekte</span><span class="tab active">Food-Truck Bestell-App <span class="x">✕</span></span><span class="tab">Vereinsportal <span class="x">✕</span></span></div>
+    <div class="seg"><span class="on">Backlog</span><span>Board</span><span>Epics</span><span>Bericht</span></div>
+  </header>
+  <main>
+    <div class="crumbs">Backlog › Epic „Bestellen“ › <span class="id">FT-23</span></div>
+    <div class="row" style="margin-bottom:14px"><h1>Vorbestellung per Handy aufgeben</h1><span class="chip acc">Bereit</span></div>
+    <div class="editor" style="grid-template-columns:1fr 1fr">
+      <div class="card pad">
+        <div class="threec"><span>① Card</span><span class="on">② Conversation <em>4</em></span><span>③ Confirmation</span></div>
+        <div class="conv"><span class="avatar" style="background:#f59f00">LK</span><div><b>Lena (PO)</b> <small>· 3. Okt</small><br>Gäste sollen eine Abholzeit wählen können – nicht nur „so schnell wie möglich“.</div></div>
+        <div class="conv"><span class="avatar" style="background:#4f46e5">TM</span><div><b>Tom (Entwicklung)</b> <small>· 3. Okt</small><br>Wie viele Bestellungen pro 10-Minuten-Slot schafft die Küche?</div></div>
+        <div class="conv"><span class="avatar" style="background:#2b8a3e">AS</span><div><b>Aylin (Küche)</b> <small>· 4. Okt</small><br>Maximal 12. Danach Slot als „voll“ anzeigen. <span class="chip good" style="margin-left:4px">→ AK 3</span></div></div>
+        <div class="conv"><span class="avatar" style="background:#868e96">?</span><div><span class="q">Offene Frage</span> <small>· 5. Okt</small><br>Darf man eine Vorbestellung stornieren – und bis wann? <span class="chip">Antwort ausstehend</span></div></div>
+        <div class="input" style="margin-top:10px;color:var(--muted)">Notiz, Entscheidung oder Frage festhalten … <span style="float:right"><span class="chip">Frage</span> <span class="chip">Entscheidung</span></span></div>
+        <div class="sub" style="font-size:12px;margin-top:8px">💡 Entscheidungen lassen sich mit einem Klick als Akzeptanzkriterium übernehmen.</div>
+      </div>
+
+      <div class="card pad">
+        <div class="threec"><span>① Card</span><span>② Conversation</span><span class="on">③ Confirmation <em>4 AK</em></span></div>
+        <div class="row" style="margin-bottom:10px"><b>Akzeptanzkriterien</b><span class="spacer"></span><div class="seg"><span class="on">Gegeben/Wenn/Dann</span><span>Checkliste</span></div></div>
+
+        <div class="ac"><div class="ac-head"><span class="check"></span> AK 1 · Bestellung aufgeben<span class="spacer"></span><span class="grip">⋮⋮</span></div>
+          <div class="ac-body"><b>Gegeben</b><span>der Truck ist geöffnet und ich habe Gerichte im Warenkorb</span><b>Wenn</b><span>ich auf „Jetzt vorbestellen“ tippe</span><b>Dann</b><span>erhalte ich eine Bestätigung mit Abholzeit und Nummer</span></div></div>
+        <div class="ac"><div class="ac-head"><span class="check"></span> AK 2 · Geschlossener Truck<span class="spacer"></span><span class="grip">⋮⋮</span></div>
+          <div class="ac-body"><b>Gegeben</b><span>der Truck ist geschlossen</span><b>Wenn</b><span>ich die App öffne</span><b>Dann</b><span>ist Vorbestellen deaktiviert und die nächste Öffnungszeit wird angezeigt</span></div></div>
+        <div class="ac"><div class="ac-head"><span class="check"></span> AK 3 · Voller Zeitslot<span class="spacer"></span><span class="chip" style="height:18px;font-size:11px">aus Conversation</span></div>
+          <div class="ac-body"><b>Gegeben</b><span>ein Slot hat bereits 12 Bestellungen</span><b>Wenn</b><span>ich Abholzeiten auswähle</span><b>Dann</b><span>ist dieser Slot als „voll“ markiert und nicht wählbar</span></div></div>
+        <div class="ac" style="border-color:#f0b35b"><div class="ac-head" style="background:var(--warn-bg)"><span class="check"></span> AK 4 · Mindestvorlauf<span class="spacer"></span><span class="chip warn" style="height:18px;font-size:11px">„Dann“ fehlt</span></div>
+          <div class="ac-body"><b>Gegeben</b><span>es ist 12:05 Uhr</span><b>Wenn</b><span>ich eine Abholzeit wähle</span><b style="color:var(--warn)">Dann</b><span class="input warn" style="min-height:28px;padding:3px 8px;color:var(--muted)">…</span></div></div>
+        <button class="btn sm" style="margin-top:4px">+ Akzeptanzkriterium</button>
+        <div class="row" style="margin-top:14px;font-size:12.5px"><span class="sub">Häkchen = beim Test bestätigt (Abarbeitung). Alle ✓ + DoD → Story kann auf „Fertig“.</span></div>
+      </div>
+    </div>
+  </main>
+</section>
+
+<!-- ============ 5 Board ============ -->
+<div class="caption">5 · Board (Abarbeitung) mit Definition of Ready / Done</div>
+<section class="screen" id="s5-board">
+  <header class="app-header">
+    <div class="brand"><span class="logo">US</span></div>
+    <div class="tabs"><span class="tab">Alle Projekte</span><span class="tab active">Food-Truck Bestell-App <span class="x">✕</span></span><span class="tab">Vereinsportal <span class="x">✕</span></span></div>
+    <div class="seg"><span>Backlog</span><span class="on">Board</span><span>Epics</span><span>Bericht</span></div>
+  </header>
+  <main>
+    <div class="toolbar">
+      <b style="font-size:16px">Sprint 5</b><span class="sub">14.–25. Okt · Ziel: „Gäste können vorbestellen und bezahlen“</span>
+      <span class="spacer"></span>
+      <span class="sub">21 / 24 SP geplant</span><div class="progress" style="width:140px"><span style="width:29%;background:var(--good)"></span><span style="width:33%;background:#06b6d4"></span></div>
+      <div class="seg"><span class="on">Sprint</span><span>Alle Stories</span></div>
+    </div>
+    <div class="board">
+      <div class="col">
+        <div class="col-head">Entwurf <span class="n">3</span></div>
+        <div class="tcard"><span class="id">FT-27</span><div class="t">Lieblingsbestellung speichern</div><div class="f"><span class="invest"><i class="n">I</i><i class="y">N</i><i class="y">V</i><i class="y">E</i><i class="y">S</i><i class="n">T</i></span><span class="pts" style="margin-left:auto">?</span></div></div>
+        <div class="tcard"><span class="id">FT-16</span><div class="t">Statistiken, Lager, Personal …</div><div class="f"><span class="chip bad" style="height:18px;font-size:11px">zu groß</span><span class="pts" style="margin-left:auto;background:var(--bad-bg);color:var(--bad)">40</span></div></div>
+        <div class="tcard"><span class="id">FT-30</span><div class="t">Allergene je Gericht anzeigen</div><div class="f"><span class="chip could" style="height:18px">C</span><span class="pts" style="margin-left:auto">2</span></div></div>
+      </div>
+      <div class="col">
+        <div class="col-head">Bereit <span class="n">2</span></div>
+        <div class="gate dor">Eingang: Definition of Ready ✓</div>
+        <div class="tcard"><span class="id">FT-23</span><div class="t">Vorbestellung per Handy aufgeben</div><div class="f"><span class="chip must" style="height:18px">M</span><span>AK 0/4</span><span class="mini-ac"><span></span><span></span><span></span><span></span></span><span class="pts">5</span></div></div>
+        <div class="tcard"><span class="id">FT-14</span><div class="t">Ausverkaufte Gerichte sperren</div><div class="f"><span class="chip should" style="height:18px">S</span><span>AK 0/2</span><span class="mini-ac"><span></span><span></span></span><span class="pts">3</span></div></div>
+      </div>
+      <div class="col" style="position:relative">
+        <div class="col-head">In Arbeit <span class="n">2</span><span class="wip">WIP 2/3</span></div>
+        <div class="tcard"><span class="id">FT-24</span><div class="t">Mit Apple/Google Pay bezahlen</div><div class="f"><span class="avatar" style="background:#4f46e5;width:20px;height:20px;font-size:9px">TM</span><span>AK 2/5</span><span class="mini-ac"><span class="on"></span><span class="on"></span><span></span><span></span><span></span></span><span class="pts">8</span></div></div>
+        <div class="tcard drag"><span class="id">FT-12</span><div class="t">Speisekarte mit Fotos</div><div class="f"><span class="avatar" style="background:#2b8a3e;width:20px;height:20px;font-size:9px">AS</span><span>AK 3/3</span><span class="mini-ac"><span class="on"></span><span class="on"></span><span class="on"></span></span><span class="pts">2</span></div></div>
+      </div>
+      <div class="col">
+        <div class="col-head">Review <span class="n">1</span></div>
+        <div class="tcard"><span class="id">FT-11</span><div class="t">Bestellungen in Reihenfolge sehen</div><div class="f"><span>AK 3/4</span><span class="mini-ac"><span class="on"></span><span class="on"></span><span class="on"></span><span></span></span><span class="pts">5</span></div></div>
+        <div style="border:2px dashed var(--accent);border-radius:10px;height:70px;display:grid;place-items:center;color:var(--accent);font-weight:600;font-size:12px">hier ablegen</div>
+      </div>
+      <div class="col">
+        <div class="col-head">Fertig <span class="n">1</span></div>
+        <div class="gate dod">Eingang: alle AK ✓ + Definition of Done</div>
+        <div class="tcard" style="opacity:.75"><span class="id">FT-19</span><div class="t">Abholnummer aufs Handy</div><div class="f"><span class="chip good" style="height:18px;font-size:11px">✓ abgenommen</span><span class="pts" style="margin-left:auto">3</span></div></div>
+      </div>
+    </div>
+    <div class="popover" style="left:770px;top:330px">
+      <b>FT-11 nach „Fertig“ verschieben?</b>
+      <div class="hint" style="margin-top:8px">AK 4 „Leere Warteschlange“ ist noch nicht bestätigt.</div>
+      <div class="stat-row" style="margin-top:6px"><span><span class="check on">✓</span> Code-Review</span></div>
+      <div class="stat-row"><span><span class="check on">✓</span> Getestet auf iOS &amp; Android</span></div>
+      <div class="stat-row"><span><span class="check"></span> Vom PO abgenommen</span></div>
+      <div class="row" style="margin-top:10px;justify-content:flex-end"><button class="btn sm">Abbrechen</button><button class="btn sm primary">Trotzdem verschieben</button></div>
+    </div>
+  </main>
+</section>
+
+<!-- ============ 6 Aufteilen ============ -->
+<div class="caption">6 · Story aufteilen (wenn „Small“ oder „Independent“ verletzt)</div>
+<section class="screen" id="s6-split" style="height:620px">
+  <div style="position:absolute;inset:0;background:rgba(16,24,40,.35)"></div>
+  <div class="card" style="position:absolute;left:50%;top:40px;transform:translateX(-50%);width:860px;padding:20px;box-shadow:var(--shadow-lg)">
+    <div class="row"><h1 style="font-size:18px">FT-16 aufteilen</h1><span class="chip bad">40 SP · Small ✕</span><span class="spacer"></span><span class="sub">✕</span></div>
+    <div class="preview" style="margin:12px 0;font-size:13.5px"><span class="kw">Als</span> Betreiberin <span class="kw">möchte ich</span> Statistiken, Lager, Personalplanung und Kassenabschluss in der App, <span class="kw">damit</span> ich alles an einem Ort habe.</div>
+    <div class="row" style="gap:8px;margin-bottom:12px"><span class="sub" style="font-weight:600">Muster:</span><div class="seg"><span class="on">nach Teilfunktion</span><span>nach Workflow-Schritt</span><span>nach Datenart</span><span>einfach/komplex</span><span>Happy Path / Fehler</span></div></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div class="card pad" style="box-shadow:none"><span class="id">neu 1</span><div><span class="kw">Als</span> Betreiberin <span class="kw">möchte ich</span> <b>den Tagesumsatz sehen</b>, <span class="kw">damit</span> ich den Kassenabschluss machen kann.</div><div class="row" style="margin-top:8px"><span class="pts">3</span><span class="chip should">Should</span></div></div>
+      <div class="card pad" style="box-shadow:none"><span class="id">neu 2</span><div><span class="kw">Als</span> Betreiberin <span class="kw">möchte ich</span> <b>meistverkaufte Gerichte je Woche sehen</b>, <span class="kw">damit</span> ich besser einkaufe.</div><div class="row" style="margin-top:8px"><span class="pts">5</span><span class="chip could">Could</span></div></div>
+      <div class="card pad" style="box-shadow:none"><span class="id">neu 3</span><div><span class="kw">Als</span> Betreiberin <span class="kw">möchte ich</span> <b>einen Mindestbestand je Zutat hinterlegen</b>, <span class="kw">damit</span> ich rechtzeitig nachkaufe.</div><div class="row" style="margin-top:8px"><span class="pts">5</span><span class="chip could">Could</span></div></div>
+      <div class="card pad" style="box-shadow:none;border-style:dashed;color:var(--muted);display:grid;place-items:center">+ weitere Teil-Story</div>
+    </div>
+    <div class="row" style="margin-top:14px"><label class="sub"><span class="check on" style="vertical-align:-3px">✓</span> Original als Epic „Betrieb &amp; Auswertung“ behalten</label><span class="spacer"></span><button class="btn">Abbrechen</button><button class="btn primary">3 Stories anlegen</button></div>
+  </div>
+</section>
+
+<!-- ============ 7 Mobil ============ -->
+<div class="caption">7 · Mobil (Backlog)</div>
+<section class="screen mobile" id="s7-mobil">
+  <div class="m-header"><span class="logo">US</span><b style="flex:1">Food-Truck Bestell-App</b><span class="sub">⌕</span><span class="sub">⋯</span></div>
+  <div style="padding:10px 14px;display:flex;gap:6px;overflow:hidden"><span class="chip acc">Alle 31</span><span class="chip">Bereit 5</span><span class="chip warn">⚠ 4</span><span class="chip">Must</span></div>
+  <div class="m-story" style="box-shadow:inset 3px 0 0 var(--accent)"><div class="row" style="gap:6px"><span class="id">FT-23</span><span class="chip acc" style="height:18px;font-size:11px">Bereit</span><span class="spacer"></span><span class="pts">5</span></div><div style="margin:6px 0"><span class="kw">Als</span> hungriger Gast <span class="kw">möchte ich</span> <b>meine Bestellung vorab per Handy aufgeben</b>, <span class="kw">damit</span> ich nicht in der Schlange warte.</div><div class="row" style="gap:6px"><span class="invest"><i class="y">I</i><i class="y">N</i><i class="y">V</i><i class="y">E</i><i class="y">S</i><i class="q">T</i></span><span class="chip must" style="height:18px">M</span><span class="sub" style="font-size:12px;margin-left:auto">AK 3/4</span></div></div>
+  <div class="m-story"><div class="row" style="gap:6px"><span class="id">FT-24</span><span class="chip" style="height:18px;font-size:11px;background:#cffafe;color:#0e7490;border:0">In Arbeit</span><span class="spacer"></span><span class="pts">8</span></div><div style="margin:6px 0"><span class="kw">Als</span> Gast <span class="kw">möchte ich</span> <b>mit Apple/Google Pay bezahlen</b>, <span class="kw">damit</span> ich kein Bargeld brauche.</div><div class="row" style="gap:6px"><span class="invest"><i class="y">I</i><i class="y">N</i><i class="y">V</i><i class="y">E</i><i class="y">S</i><i class="y">T</i></span><span class="chip must" style="height:18px">M</span><span class="sub" style="font-size:12px;margin-left:auto">AK 2/5</span></div></div>
+  <div class="m-story"><div class="row" style="gap:6px"><span class="id">FT-27</span><span class="chip" style="height:18px;font-size:11px">Entwurf</span><span class="spacer"></span><span class="pts">?</span></div><div style="margin:6px 0"><span class="kw">Als</span> Stammgast <span class="kw">möchte ich</span> <b>meine Lieblingsbestellung speichern</b>, <span class="kw">damit</span> ich schnell nachbestellen kann.</div><div class="row" style="gap:6px"><span class="invest"><i class="n">I</i><i class="y">N</i><i class="y">V</i><i class="y">E</i><i class="y">S</i><i class="n">T</i></span><span class="chip could" style="height:18px">C</span><span class="sub" style="font-size:12px;margin-left:auto;color:var(--bad)">keine AK</span></div></div>
+  <div class="m-story"><div class="row" style="gap:6px"><span class="id">FT-19</span><span class="chip good" style="height:18px;font-size:11px">Fertig</span><span class="spacer"></span><span class="pts">3</span></div><div style="margin:6px 0"><span class="kw">Als</span> Gast <span class="kw">möchte ich</span> <b>eine Abholnummer aufs Handy bekommen</b> …</div></div>
+  <div style="position:relative;height:60px"><button class="btn primary" style="position:absolute;right:14px;top:6px;border-radius:999px;height:44px">+ Story</button></div>
+  <div class="m-nav"><span class="on">☰<br>Backlog</span><span>▦<br>Board</span><span>◆<br>Epics</span><span>▤<br>Bericht</span></div>
+</section>
+
+</body>
+</html>
