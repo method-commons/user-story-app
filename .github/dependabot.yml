@@ -1,0 +1,27 @@
+# Wöchentliche Updates, gebündelt in je einem Pull Request. Große Versionssprünge
+# (z. B. Preact 11, TypeScript 7) bewusst ausgenommen – die werden einzeln geprüft.
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      npm:
+        update-types: [minor, patch]
+    ignore:
+      - dependency-name: '*'
+        update-types: [version-update:semver-major]
+      # Passend zum vorinstallierten Chromium der Cloud-Sitzungen (Claude Code); nur von Hand anheben
+      - dependency-name: '@playwright/test'
+    commit-message:
+      prefix: 'Abhängigkeiten'
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      actions:
+        patterns: ['*']
+    commit-message:
+      prefix: 'Actions'

@@ -1,0 +1,485 @@
+{
+  "version": 1,
+  "id": "example-food-truck",
+  "key": "FT",
+  "name": "Food truck ordering app",
+  "description": "Example: guests order and pay in advance on their phone and pick up their food without queuing.",
+  "color": "#f59f00",
+  "settings": {
+    "sizeScale": "tshirt",
+    "smallLimit": "M",
+    "dor": [
+      {
+        "id": "dor-po",
+        "text": "Discussed with the product owner"
+      }
+    ],
+    "dod": [
+      {
+        "id": "dod-test",
+        "text": "Tested on iOS and Android"
+      },
+      {
+        "id": "dod-po",
+        "text": "Accepted by the product owner"
+      }
+    ]
+  },
+  "epics": [
+    {
+      "id": "e-order",
+      "name": "Ordering",
+      "color": "#f59f00",
+      "description": "Guests order and pay in advance on their phone."
+    },
+    {
+      "id": "e-kitchen",
+      "name": "Kitchen & pick-up",
+      "color": "#4f46e5",
+      "description": "Process orders in the kitchen and hand them out."
+    },
+    {
+      "id": "e-ops",
+      "name": "Operations",
+      "color": "#2b8a3e",
+      "description": "Maintain location, menu and opening hours."
+    }
+  ],
+  "stories": [
+    {
+      "id": "s-menu",
+      "number": 1,
+      "title": "View menu",
+      "role": "a hungry guest",
+      "want": "see today’s menu with prices",
+      "benefit": "I can decide on the way",
+      "notes": "",
+      "size": "S",
+      "priority": "must",
+      "epicId": "e-order",
+      "status": "done",
+      "dependsOn": [],
+      "conversation": [],
+      "criteria": [
+        {
+          "id": "a1",
+          "title": "Menu",
+          "format": "gwt",
+          "given": "the truck has a daily menu",
+          "when": "I open the app",
+          "then": "I see all dishes with price and photo",
+          "text": "",
+          "confirmed": true
+        },
+        {
+          "id": "a2",
+          "title": "Allergens",
+          "format": "check",
+          "given": "",
+          "when": "",
+          "then": "",
+          "text": "The 14 major allergens are shown for every dish",
+          "confirmed": true
+        }
+      ],
+      "invest": {},
+      "dor": {
+        "dor-po": true
+      },
+      "dod": {
+        "dod-test": true,
+        "dod-po": true
+      },
+      "createdAt": "2026-10-01T09:00:00.000Z",
+      "updatedAt": "2026-10-08T14:30:00.000Z"
+    },
+    {
+      "id": "s-preorder",
+      "number": 2,
+      "title": "Place pre-order",
+      "role": "a hungry guest",
+      "want": "place my order in advance on my phone",
+      "benefit": "I don’t have to queue",
+      "notes": "Pre-orders only during opening hours, at least 10 minutes ahead.",
+      "size": "M",
+      "priority": "must",
+      "epicId": "e-order",
+      "status": "ready",
+      "dependsOn": [
+        "s-pay"
+      ],
+      "conversation": [
+        {
+          "id": "k1",
+          "kind": "note",
+          "author": "Lena (PO)",
+          "text": "Guests should be able to pick a pick-up time – not just “as soon as possible”.",
+          "date": "2026-10-03",
+          "resolved": false,
+          "criterionId": null
+        },
+        {
+          "id": "k2",
+          "kind": "question",
+          "author": "Tom",
+          "text": "How many orders per 10-minute slot can the kitchen handle?",
+          "date": "2026-10-03",
+          "resolved": true,
+          "criterionId": null
+        },
+        {
+          "id": "k3",
+          "kind": "decision",
+          "author": "Aylin",
+          "text": "At most 12 orders per slot, then it is full.",
+          "date": "2026-10-04",
+          "resolved": false,
+          "criterionId": "a5"
+        }
+      ],
+      "criteria": [
+        {
+          "id": "a3",
+          "title": "Place order",
+          "format": "gwt",
+          "given": "the truck is open and I have dishes in my basket",
+          "when": "I tap “Pre-order now”",
+          "then": "I get a confirmation with pick-up time and number",
+          "text": "",
+          "confirmed": false
+        },
+        {
+          "id": "a4",
+          "title": "Truck closed",
+          "format": "gwt",
+          "given": "the truck is closed",
+          "when": "I open the app",
+          "then": "pre-ordering is disabled and the next opening time is shown",
+          "text": "",
+          "confirmed": false
+        },
+        {
+          "id": "a5",
+          "title": "Full slot",
+          "format": "check",
+          "given": "",
+          "when": "",
+          "then": "",
+          "text": "At most 12 orders per slot, then it is full.",
+          "confirmed": false
+        }
+      ],
+      "invest": {
+        "I": true
+      },
+      "dor": {
+        "dor-po": true
+      },
+      "dod": {},
+      "createdAt": "2026-10-01T09:00:00.000Z",
+      "updatedAt": "2026-10-08T14:30:00.000Z"
+    },
+    {
+      "id": "s-pay",
+      "number": 3,
+      "title": "Pay by phone",
+      "role": "a guest",
+      "want": "pay with Apple Pay or Google Pay",
+      "benefit": "I don’t need cash",
+      "notes": "",
+      "size": "M",
+      "priority": "must",
+      "epicId": "e-order",
+      "status": "progress",
+      "dependsOn": [],
+      "conversation": [],
+      "criteria": [
+        {
+          "id": "a6",
+          "title": "Successful payment",
+          "format": "gwt",
+          "given": "I have an order in my basket",
+          "when": "I pay with Apple Pay",
+          "then": "the order is paid and sent to the kitchen",
+          "text": "",
+          "confirmed": true
+        },
+        {
+          "id": "a7",
+          "title": "Payment declined",
+          "format": "gwt",
+          "given": "my payment is declined",
+          "when": "I try to pay",
+          "then": "I see a clear message and the order stays in my basket",
+          "text": "",
+          "confirmed": false
+        },
+        {
+          "id": "a8",
+          "title": "Receipt",
+          "format": "check",
+          "given": "",
+          "when": "",
+          "then": "",
+          "text": "After payment a receipt is sent by e-mail",
+          "confirmed": false
+        }
+      ],
+      "invest": {
+        "I": true
+      },
+      "dor": {
+        "dor-po": true
+      },
+      "dod": {},
+      "createdAt": "2026-10-01T09:00:00.000Z",
+      "updatedAt": "2026-10-08T14:30:00.000Z"
+    },
+    {
+      "id": "s-pickup",
+      "number": 4,
+      "title": "",
+      "role": "a guest",
+      "want": "get a notification as soon as my food is ready",
+      "benefit": "I can pick it up while it’s hot",
+      "notes": "",
+      "size": "S",
+      "priority": "should",
+      "epicId": "e-order",
+      "status": "review",
+      "dependsOn": [],
+      "conversation": [],
+      "criteria": [
+        {
+          "id": "a9",
+          "title": "",
+          "format": "gwt",
+          "given": "my order is marked as ready in the kitchen",
+          "when": "the app is closed",
+          "then": "I receive a push notification with my pick-up number within 10 seconds",
+          "text": "",
+          "confirmed": true
+        },
+        {
+          "id": "a10",
+          "title": "",
+          "format": "check",
+          "given": "",
+          "when": "",
+          "then": "",
+          "text": "Without push permission the number is shown large in the app",
+          "confirmed": false
+        }
+      ],
+      "invest": {},
+      "dor": {
+        "dor-po": true
+      },
+      "dod": {
+        "dod-test": true
+      },
+      "createdAt": "2026-10-01T09:00:00.000Z",
+      "updatedAt": "2026-10-08T14:30:00.000Z"
+    },
+    {
+      "id": "s-favorite",
+      "number": 5,
+      "title": "",
+      "role": "a regular",
+      "want": "save my favourite order",
+      "benefit": "I can reorder with one tap",
+      "notes": "",
+      "size": null,
+      "priority": "could",
+      "epicId": "e-order",
+      "status": "draft",
+      "dependsOn": [],
+      "conversation": [
+        {
+          "id": "k4",
+          "kind": "question",
+          "author": "Lena (PO)",
+          "text": "Do we need a user account for this?",
+          "date": "2026-10-06",
+          "resolved": false,
+          "criterionId": null
+        }
+      ],
+      "criteria": [],
+      "invest": {},
+      "dor": {},
+      "dod": {},
+      "createdAt": "2026-10-01T09:00:00.000Z",
+      "updatedAt": "2026-10-08T14:30:00.000Z"
+    },
+    {
+      "id": "s-queue",
+      "number": 6,
+      "title": "",
+      "role": "a cook",
+      "want": "see incoming orders in order of pick-up time",
+      "benefit": "nothing is forgotten and everything is ready on time",
+      "notes": "",
+      "size": "M",
+      "priority": "must",
+      "epicId": "e-kitchen",
+      "status": "done",
+      "dependsOn": [],
+      "conversation": [],
+      "criteria": [
+        {
+          "id": "a11",
+          "title": "",
+          "format": "gwt",
+          "given": "there are several orders",
+          "when": "I open the kitchen view",
+          "then": "they are sorted by pick-up time, the next one on top",
+          "text": "",
+          "confirmed": true
+        },
+        {
+          "id": "a12",
+          "title": "",
+          "format": "check",
+          "given": "",
+          "when": "",
+          "then": "",
+          "text": "New orders appear without reloading",
+          "confirmed": true
+        }
+      ],
+      "invest": {},
+      "dor": {
+        "dor-po": true
+      },
+      "dod": {
+        "dod-test": true,
+        "dod-po": true
+      },
+      "createdAt": "2026-10-01T09:00:00.000Z",
+      "updatedAt": "2026-10-08T14:30:00.000Z"
+    },
+    {
+      "id": "s-soldout",
+      "number": 7,
+      "title": "",
+      "role": "the owner",
+      "want": "mark dishes as sold out",
+      "benefit": "nobody orders something that is no longer available",
+      "notes": "",
+      "size": "S",
+      "priority": "should",
+      "epicId": "e-kitchen",
+      "status": "ready",
+      "dependsOn": [],
+      "conversation": [],
+      "criteria": [
+        {
+          "id": "a13",
+          "title": "",
+          "format": "gwt",
+          "given": "a dish is sold out",
+          "when": "I mark it in the kitchen view",
+          "then": "guests can no longer order it right away",
+          "text": "",
+          "confirmed": false
+        }
+      ],
+      "invest": {},
+      "dor": {
+        "dor-po": true
+      },
+      "dod": {},
+      "createdAt": "2026-10-01T09:00:00.000Z",
+      "updatedAt": "2026-10-08T14:30:00.000Z"
+    },
+    {
+      "id": "s-stats",
+      "number": 8,
+      "title": "",
+      "role": "the owner",
+      "want": "have statistics, stock levels, staff planning and cash-up in the app",
+      "benefit": "I have everything in one place",
+      "notes": "",
+      "size": "XL",
+      "priority": "could",
+      "epicId": "e-ops",
+      "status": "draft",
+      "dependsOn": [],
+      "conversation": [],
+      "criteria": [
+        {
+          "id": "a14",
+          "title": "",
+          "format": "check",
+          "given": "",
+          "when": "",
+          "then": "",
+          "text": "The reports are clear and fast",
+          "confirmed": false
+        }
+      ],
+      "invest": {},
+      "dor": {},
+      "dod": {},
+      "createdAt": "2026-10-01T09:00:00.000Z",
+      "updatedAt": "2026-10-08T14:30:00.000Z"
+    },
+    {
+      "id": "s-location",
+      "number": 9,
+      "title": "",
+      "role": "a guest",
+      "want": "see where the truck is today",
+      "benefit": "I can find it",
+      "notes": "",
+      "size": "S",
+      "priority": "must",
+      "epicId": "e-ops",
+      "status": "draft",
+      "dependsOn": [],
+      "conversation": [],
+      "criteria": [
+        {
+          "id": "a15",
+          "title": "",
+          "format": "gwt",
+          "given": "the owner has entered today’s location",
+          "when": "I open the app",
+          "then": "I see the address and a map with the location",
+          "text": "",
+          "confirmed": false
+        }
+      ],
+      "invest": {},
+      "dor": {},
+      "dod": {},
+      "createdAt": "2026-10-01T09:00:00.000Z",
+      "updatedAt": "2026-10-08T14:30:00.000Z"
+    },
+    {
+      "id": "s-db",
+      "number": 10,
+      "title": "",
+      "role": "a user",
+      "want": "use a PostgreSQL database",
+      "benefit": "",
+      "notes": "Example of a technical “story” without benefit – visible in the INVEST check.",
+      "size": null,
+      "priority": "wont",
+      "epicId": null,
+      "status": "draft",
+      "dependsOn": [],
+      "conversation": [],
+      "criteria": [],
+      "invest": {},
+      "dor": {},
+      "dod": {},
+      "createdAt": "2026-10-01T09:00:00.000Z",
+      "updatedAt": "2026-10-08T14:30:00.000Z"
+    }
+  ],
+  "nextNumber": 11,
+  "createdAt": "2026-10-01T09:00:00.000Z",
+  "updatedAt": "2026-10-08T14:30:00.000Z"
+}

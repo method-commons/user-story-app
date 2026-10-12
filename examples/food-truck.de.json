@@ -1,0 +1,485 @@
+{
+  "version": 1,
+  "id": "example-food-truck",
+  "key": "FT",
+  "name": "Food-Truck Bestell-App",
+  "description": "Beispiel: Gäste bestellen und bezahlen vorab per Handy und holen ihr Essen ohne Warteschlange ab.",
+  "color": "#f59f00",
+  "settings": {
+    "sizeScale": "tshirt",
+    "smallLimit": "M",
+    "dor": [
+      {
+        "id": "dor-po",
+        "text": "Mit dem Product Owner besprochen"
+      }
+    ],
+    "dod": [
+      {
+        "id": "dod-test",
+        "text": "Getestet auf iOS und Android"
+      },
+      {
+        "id": "dod-po",
+        "text": "Vom Product Owner abgenommen"
+      }
+    ]
+  },
+  "epics": [
+    {
+      "id": "e-order",
+      "name": "Bestellen",
+      "color": "#f59f00",
+      "description": "Gäste bestellen und bezahlen vorab per Handy."
+    },
+    {
+      "id": "e-kitchen",
+      "name": "Küche & Ausgabe",
+      "color": "#4f46e5",
+      "description": "Bestellungen in der Küche abarbeiten und ausgeben."
+    },
+    {
+      "id": "e-ops",
+      "name": "Betrieb",
+      "color": "#2b8a3e",
+      "description": "Standort, Speisekarte und Öffnungszeiten pflegen."
+    }
+  ],
+  "stories": [
+    {
+      "id": "s-menu",
+      "number": 1,
+      "title": "Speisekarte ansehen",
+      "role": "hungriger Gast",
+      "want": "die heutige Speisekarte mit Preisen sehen",
+      "benefit": "ich schon unterwegs entscheiden kann",
+      "notes": "",
+      "size": "S",
+      "priority": "must",
+      "epicId": "e-order",
+      "status": "done",
+      "dependsOn": [],
+      "conversation": [],
+      "criteria": [
+        {
+          "id": "a1",
+          "title": "Karte",
+          "format": "gwt",
+          "given": "der Truck hat eine Tageskarte hinterlegt",
+          "when": "ich die App öffne",
+          "then": "sehe ich alle Gerichte mit Preis und Foto",
+          "text": "",
+          "confirmed": true
+        },
+        {
+          "id": "a2",
+          "title": "Allergene",
+          "format": "check",
+          "given": "",
+          "when": "",
+          "then": "",
+          "text": "Zu jedem Gericht werden die 14 Hauptallergene angezeigt",
+          "confirmed": true
+        }
+      ],
+      "invest": {},
+      "dor": {
+        "dor-po": true
+      },
+      "dod": {
+        "dod-test": true,
+        "dod-po": true
+      },
+      "createdAt": "2026-10-01T09:00:00.000Z",
+      "updatedAt": "2026-10-08T14:30:00.000Z"
+    },
+    {
+      "id": "s-preorder",
+      "number": 2,
+      "title": "Vorbestellung aufgeben",
+      "role": "hungriger Gast",
+      "want": "meine Bestellung vorab per Handy aufgeben",
+      "benefit": "ich nicht in der Schlange warten muss",
+      "notes": "Vorbestellung nur während der Öffnungszeiten, Mindestvorlauf 10 Minuten.",
+      "size": "M",
+      "priority": "must",
+      "epicId": "e-order",
+      "status": "ready",
+      "dependsOn": [
+        "s-pay"
+      ],
+      "conversation": [
+        {
+          "id": "k1",
+          "kind": "note",
+          "author": "Lena (PO)",
+          "text": "Gäste sollen eine Abholzeit wählen können – nicht nur „so schnell wie möglich“.",
+          "date": "2026-10-03",
+          "resolved": false,
+          "criterionId": null
+        },
+        {
+          "id": "k2",
+          "kind": "question",
+          "author": "Tom",
+          "text": "Wie viele Bestellungen pro 10-Minuten-Fenster schafft die Küche?",
+          "date": "2026-10-03",
+          "resolved": true,
+          "criterionId": null
+        },
+        {
+          "id": "k3",
+          "kind": "decision",
+          "author": "Aylin",
+          "text": "Höchstens 12 Bestellungen je Zeitfenster, danach ist es voll.",
+          "date": "2026-10-04",
+          "resolved": false,
+          "criterionId": "a5"
+        }
+      ],
+      "criteria": [
+        {
+          "id": "a3",
+          "title": "Bestellung aufgeben",
+          "format": "gwt",
+          "given": "der Truck ist geöffnet und ich habe Gerichte im Warenkorb",
+          "when": "ich auf „Jetzt vorbestellen“ tippe",
+          "then": "erhalte ich eine Bestätigung mit Abholzeit und Abholnummer",
+          "text": "",
+          "confirmed": false
+        },
+        {
+          "id": "a4",
+          "title": "Truck geschlossen",
+          "format": "gwt",
+          "given": "der Truck ist geschlossen",
+          "when": "ich die App öffne",
+          "then": "ist Vorbestellen deaktiviert und die nächste Öffnungszeit wird angezeigt",
+          "text": "",
+          "confirmed": false
+        },
+        {
+          "id": "a5",
+          "title": "Volles Zeitfenster",
+          "format": "check",
+          "given": "",
+          "when": "",
+          "then": "",
+          "text": "Höchstens 12 Bestellungen je Zeitfenster, danach ist es voll.",
+          "confirmed": false
+        }
+      ],
+      "invest": {
+        "I": true
+      },
+      "dor": {
+        "dor-po": true
+      },
+      "dod": {},
+      "createdAt": "2026-10-01T09:00:00.000Z",
+      "updatedAt": "2026-10-08T14:30:00.000Z"
+    },
+    {
+      "id": "s-pay",
+      "number": 3,
+      "title": "Mobil bezahlen",
+      "role": "Gast",
+      "want": "mit Apple Pay oder Google Pay bezahlen",
+      "benefit": "ich kein Bargeld brauche",
+      "notes": "",
+      "size": "M",
+      "priority": "must",
+      "epicId": "e-order",
+      "status": "progress",
+      "dependsOn": [],
+      "conversation": [],
+      "criteria": [
+        {
+          "id": "a6",
+          "title": "Erfolgreiche Zahlung",
+          "format": "gwt",
+          "given": "ich habe eine Bestellung im Warenkorb",
+          "when": "ich mit Apple Pay bezahle",
+          "then": "ist die Bestellung bezahlt und an die Küche übermittelt",
+          "text": "",
+          "confirmed": true
+        },
+        {
+          "id": "a7",
+          "title": "Zahlung abgelehnt",
+          "format": "gwt",
+          "given": "meine Zahlung wird abgelehnt",
+          "when": "ich bezahlen möchte",
+          "then": "sehe ich eine verständliche Meldung und die Bestellung bleibt im Warenkorb",
+          "text": "",
+          "confirmed": false
+        },
+        {
+          "id": "a8",
+          "title": "Beleg",
+          "format": "check",
+          "given": "",
+          "when": "",
+          "then": "",
+          "text": "Nach der Zahlung kommt ein Beleg per E-Mail",
+          "confirmed": false
+        }
+      ],
+      "invest": {
+        "I": true
+      },
+      "dor": {
+        "dor-po": true
+      },
+      "dod": {},
+      "createdAt": "2026-10-01T09:00:00.000Z",
+      "updatedAt": "2026-10-08T14:30:00.000Z"
+    },
+    {
+      "id": "s-pickup",
+      "number": 4,
+      "title": "",
+      "role": "Gast",
+      "want": "eine Benachrichtigung bekommen, sobald mein Essen fertig ist",
+      "benefit": "ich es warm abholen kann",
+      "notes": "",
+      "size": "S",
+      "priority": "should",
+      "epicId": "e-order",
+      "status": "review",
+      "dependsOn": [],
+      "conversation": [],
+      "criteria": [
+        {
+          "id": "a9",
+          "title": "",
+          "format": "gwt",
+          "given": "meine Bestellung wird in der Küche als fertig markiert",
+          "when": "ich die App geschlossen habe",
+          "then": "erhalte ich innerhalb von 10 Sekunden eine Push-Nachricht mit meiner Abholnummer",
+          "text": "",
+          "confirmed": true
+        },
+        {
+          "id": "a10",
+          "title": "",
+          "format": "check",
+          "given": "",
+          "when": "",
+          "then": "",
+          "text": "Ohne Push-Erlaubnis wird die Nummer in der App groß angezeigt",
+          "confirmed": false
+        }
+      ],
+      "invest": {},
+      "dor": {
+        "dor-po": true
+      },
+      "dod": {
+        "dod-test": true
+      },
+      "createdAt": "2026-10-01T09:00:00.000Z",
+      "updatedAt": "2026-10-08T14:30:00.000Z"
+    },
+    {
+      "id": "s-favorite",
+      "number": 5,
+      "title": "",
+      "role": "Stammgast",
+      "want": "meine Lieblingsbestellung speichern",
+      "benefit": "ich mit einem Tipp nachbestellen kann",
+      "notes": "",
+      "size": null,
+      "priority": "could",
+      "epicId": "e-order",
+      "status": "draft",
+      "dependsOn": [],
+      "conversation": [
+        {
+          "id": "k4",
+          "kind": "question",
+          "author": "Lena (PO)",
+          "text": "Brauchen wir dafür ein Benutzerkonto?",
+          "date": "2026-10-06",
+          "resolved": false,
+          "criterionId": null
+        }
+      ],
+      "criteria": [],
+      "invest": {},
+      "dor": {},
+      "dod": {},
+      "createdAt": "2026-10-01T09:00:00.000Z",
+      "updatedAt": "2026-10-08T14:30:00.000Z"
+    },
+    {
+      "id": "s-queue",
+      "number": 6,
+      "title": "",
+      "role": "Koch",
+      "want": "eingehende Bestellungen in der Reihenfolge der Abholzeit sehen",
+      "benefit": "nichts vergessen wird und alles pünktlich fertig ist",
+      "notes": "",
+      "size": "M",
+      "priority": "must",
+      "epicId": "e-kitchen",
+      "status": "done",
+      "dependsOn": [],
+      "conversation": [],
+      "criteria": [
+        {
+          "id": "a11",
+          "title": "",
+          "format": "gwt",
+          "given": "es liegen mehrere Bestellungen vor",
+          "when": "ich die Küchenansicht öffne",
+          "then": "sind sie nach Abholzeit sortiert, die nächste steht oben",
+          "text": "",
+          "confirmed": true
+        },
+        {
+          "id": "a12",
+          "title": "",
+          "format": "check",
+          "given": "",
+          "when": "",
+          "then": "",
+          "text": "Neue Bestellungen erscheinen ohne Neuladen",
+          "confirmed": true
+        }
+      ],
+      "invest": {},
+      "dor": {
+        "dor-po": true
+      },
+      "dod": {
+        "dod-test": true,
+        "dod-po": true
+      },
+      "createdAt": "2026-10-01T09:00:00.000Z",
+      "updatedAt": "2026-10-08T14:30:00.000Z"
+    },
+    {
+      "id": "s-soldout",
+      "number": 7,
+      "title": "",
+      "role": "Betreiberin",
+      "want": "ausverkaufte Gerichte sperren",
+      "benefit": "niemand etwas bestellt, das es nicht mehr gibt",
+      "notes": "",
+      "size": "S",
+      "priority": "should",
+      "epicId": "e-kitchen",
+      "status": "ready",
+      "dependsOn": [],
+      "conversation": [],
+      "criteria": [
+        {
+          "id": "a13",
+          "title": "",
+          "format": "gwt",
+          "given": "ein Gericht ist ausverkauft",
+          "when": "ich es in der Küchenansicht sperre",
+          "then": "ist es für Gäste sofort nicht mehr bestellbar",
+          "text": "",
+          "confirmed": false
+        }
+      ],
+      "invest": {},
+      "dor": {
+        "dor-po": true
+      },
+      "dod": {},
+      "createdAt": "2026-10-01T09:00:00.000Z",
+      "updatedAt": "2026-10-08T14:30:00.000Z"
+    },
+    {
+      "id": "s-stats",
+      "number": 8,
+      "title": "",
+      "role": "Betreiberin",
+      "want": "Statistiken, Lagerbestand, Personalplanung und Kassenabschluss in der App haben",
+      "benefit": "ich alles an einem Ort habe",
+      "notes": "",
+      "size": "XL",
+      "priority": "could",
+      "epicId": "e-ops",
+      "status": "draft",
+      "dependsOn": [],
+      "conversation": [],
+      "criteria": [
+        {
+          "id": "a14",
+          "title": "",
+          "format": "check",
+          "given": "",
+          "when": "",
+          "then": "",
+          "text": "Die Auswertungen sind übersichtlich und schnell",
+          "confirmed": false
+        }
+      ],
+      "invest": {},
+      "dor": {},
+      "dod": {},
+      "createdAt": "2026-10-01T09:00:00.000Z",
+      "updatedAt": "2026-10-08T14:30:00.000Z"
+    },
+    {
+      "id": "s-location",
+      "number": 9,
+      "title": "",
+      "role": "Gast",
+      "want": "sehen, wo der Truck heute steht",
+      "benefit": "ich ihn finde",
+      "notes": "",
+      "size": "S",
+      "priority": "must",
+      "epicId": "e-ops",
+      "status": "draft",
+      "dependsOn": [],
+      "conversation": [],
+      "criteria": [
+        {
+          "id": "a15",
+          "title": "",
+          "format": "gwt",
+          "given": "die Betreiberin hat den Standort für heute eingetragen",
+          "when": "ich die App öffne",
+          "then": "sehe ich Adresse und Karte mit dem Standort",
+          "text": "",
+          "confirmed": false
+        }
+      ],
+      "invest": {},
+      "dor": {},
+      "dod": {},
+      "createdAt": "2026-10-01T09:00:00.000Z",
+      "updatedAt": "2026-10-08T14:30:00.000Z"
+    },
+    {
+      "id": "s-db",
+      "number": 10,
+      "title": "",
+      "role": "Nutzer",
+      "want": "dass die App eine PostgreSQL-Datenbank verwendet",
+      "benefit": "",
+      "notes": "Beispiel für eine technische „Story“ ohne Nutzen – im INVEST-Check sichtbar.",
+      "size": null,
+      "priority": "wont",
+      "epicId": null,
+      "status": "draft",
+      "dependsOn": [],
+      "conversation": [],
+      "criteria": [],
+      "invest": {},
+      "dor": {},
+      "dod": {},
+      "createdAt": "2026-10-01T09:00:00.000Z",
+      "updatedAt": "2026-10-08T14:30:00.000Z"
+    }
+  ],
+  "nextNumber": 11,
+  "createdAt": "2026-10-01T09:00:00.000Z",
+  "updatedAt": "2026-10-08T14:30:00.000Z"
+}
