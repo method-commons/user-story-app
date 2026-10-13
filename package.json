@@ -1,0 +1,32 @@
+{
+  "name": "user-story-app",
+  "private": true,
+  "description": "User Stories methodisch erstellen, pflegen und abarbeiten – im Browser, gebaut mit Vite, veröffentlicht über GitHub Pages.",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit -p jsconfig.json && node scripts/typecheck-logic.js",
+    "test:unit": "vitest run --coverage --coverage.reporter=text-summary",
+    "test:e2e": "playwright test",
+    "coverage": "vitest run --coverage",
+    "test": "npm run lint && npm run typecheck && npm run test:unit && npm run build && npm run test:e2e"
+  },
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "@playwright/test": "1.56.1",
+    "@vitest/coverage-v8": "5.0.3",
+    "eslint": "10.12.0",
+    "eslint-plugin-react-hooks": "7.1.1",
+    "globals": "17.13.0",
+    "typescript": "5.9.3",
+    "vite": "8.3.4",
+    "vitest": "5.0.3"
+  },
+  "dependencies": {
+    "@preact/signals": "2.11.3",
+    "preact": "10.29.8"
+  }
+}

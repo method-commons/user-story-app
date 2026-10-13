@@ -1,0 +1,12 @@
+/* Druck: nur Inhalt, Story-Karten ohne Schatten */
+@layer print {
+  @media print {
+    body { background: #fff; color: #000; font-size: 12px; }
+    .app-header, .no-print, .toasts, .overlay { display: none !important; }
+    main { padding: 0; max-width: none; }
+    .print-only { display: block; margin-bottom: 8px; }
+    .card { box-shadow: none; }
+    .report-cards { grid-template-columns: 1fr 1fr; }
+    .story-card { border: 1px solid #999; }
+  }
+}

@@ -1,0 +1,38 @@
+# CLAUDE.md – Hinweise für Claude Code
+
+User-Story-App als Web-App ohne Server: Vite 8, Preact 10 + @preact/signals, Daten nur im Browser
+(localStorage), veröffentlicht über GitHub Pages. Technische Vorlage ist die
+[Morphologische Matrix](https://github.com/method-commons/morphological-matrix-app). Funktionen und Module
+stehen in der [README](README.md), das Datenformat in [docs/DATENFORMAT.md](docs/DATENFORMAT.md).
+
+## Zusammenarbeit
+
+- **Sprache:** Antworten, Code-Kommentare, Commit-Nachrichten und PR-Texte auf **Deutsch**.
+- **Erst zeigen, dann bauen:** neue Funktionen zuerst als Mockup, umsetzen nach „Ja“.
+- **Abgrenzung:** Die App unterstützt die Methodik (Standardformat, 3Cs, INVEST, Akzeptanzkriterien, DoR/DoD) – kein Projektmanagement (keine Sprints, Velocity, Zuständigkeiten).
+- **Pull Requests nur auf Nachfrage.** Keine Modellbezeichnungen in Commits, PRs oder Code.
+- **Fertig heißt:** `npm test` grün, README/DATENFORMAT aktualisiert, Commit und Push.
+
+## Befehle
+
+```sh
+npm test                       # Lint, Typprüfung, Unit, Build, E2E
+npx eslint .                   # Lint
+npx tsc --noEmit -p jsconfig.json && node scripts/typecheck-logic.js
+npx vitest run [datei]         # Unit-Tests (tests/unit/)
+npx vite build && npx playwright test [datei]   # E2E gegen den Build (Port 4173)
+```
+
+## Architektur
+
+- **Logik ohne DOM** in `js/*.js` (`Model`, `Invest`, `Ops`, `Store`, `IO`, `Examples`), Oberfläche in `js/ui/*.jsx`.
+- **Zustand:** `project` in `js/ui/core.js` ist ein normales Objekt; neu gezeichnet wird über das Signal `revision`. Strukturelle Änderungen mit `mutate(fn)`, Textfelder mit `{...fieldProps(get, set)}` (Verlaufseintrag beim Verlassen). Navigation über den Hash (`#/p/<id>/backlog`, `#/p/<id>/s/<story>/confirmation`).
+- `main.js` entfernt `Component.prototype.shouldComponentUpdate` (von @preact/signals): sonst zeichnen Kinder mit unveränderten Props nicht neu, obwohl sich das Projekt-Objekt geändert hat.
+- **Texte** nur in `js/i18n/de.js` (maßgeblich) und `en.js` (gleiche Struktur und Platzhalter, wird geprüft).
+- **Beispiele** `examples/food-truck.{de,en}.json` müssen exakt der Ausgabe von `Model.normalize` entsprechen.
+
+## Fallstricke
+
+- **Werte vor `setState`/`mutate` lesen:** Das Neuzeichnen ist synchron; ein kontrolliertes Feld hat danach schon den alten Wert.
+- **Speichern ist verzögert** (300 ms) – E2E-Tests lesen den localStorage mit `expect.poll`.
+- **`backdrop-filter`** an der Kopfzeile bindet `position: fixed` an sie – mobil daher abgeschaltet.
