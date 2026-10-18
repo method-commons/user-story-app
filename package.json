@@ -2,6 +2,7 @@
   "name": "user-story-app",
   "private": true,
   "description": "User Stories methodisch erstellen, pflegen und abarbeiten – im Browser, gebaut mit Vite, veröffentlicht über GitHub Pages.",
+  "license": "MIT",
   "type": "module",
   "scripts": {
     "dev": "vite",
