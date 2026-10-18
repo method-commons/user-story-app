@@ -72,7 +72,13 @@ function Header() {
   return (
     <header class="app-header">
       <a class="brand" href="#/" title={Texts.ui.allProjects} id="homeLink">
-        <span class="logo" aria-hidden="true">US</span>
+        <svg class="logo" viewBox="0 0 32 32" aria-hidden="true">
+          <rect width="32" height="32" rx="7" fill="currentColor" />
+          <rect x="6" y="7.5" width="20" height="15" rx="2.5" fill="#fff" />
+          <rect x="9.5" y="11.5" width="13" height="2" rx="1" fill="currentColor" opacity=".4" />
+          <rect x="9.5" y="15.5" width="8" height="2" rx="1" fill="currentColor" opacity=".4" />
+          <path d="M18.5 23.5l2.6 2.6 5-5.4" fill="none" stroke="#fb923c" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
         <span class="brand-name">{Texts.appName}</span>
       </a>
       {p && r.view !== 'home' && (
