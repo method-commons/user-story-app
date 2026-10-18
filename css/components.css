@@ -15,10 +15,10 @@
     background: linear-gradient(90deg, var(--accent), #06b6d4 55%, #22c55e);
   }
   .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; text-decoration: none; border-radius: 10px; }
+  /* Logo wie auf der Schulungsseite (user-story-site): Karte mit Häkchen */
   .logo {
-    width: 28px; height: 28px; display: grid; place-items: center; border-radius: 8px;
-    background: var(--accent); color: var(--accent-contrast); font-size: 12px; font-weight: 800;
-    box-shadow: 0 2px 6px color-mix(in srgb, var(--accent) 40%, transparent);
+    width: 28px; height: 28px; flex: none; color: var(--accent);
+    filter: drop-shadow(0 2px 4px color-mix(in srgb, var(--accent) 35%, transparent));
   }
   .project-name {
     display: inline-flex; align-items: center; gap: 8px; max-width: 280px; height: 36px; padding: 0 12px;
