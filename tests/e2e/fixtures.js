@@ -56,7 +56,7 @@ export async function openStory(page, code) {
 
 /** Gespeicherte Projekte aus dem localStorage. */
 export function storedProjects(page) {
-  return page.evaluate(() => Object.keys(localStorage).filter(k => k.startsWith('user-stories:project:')).map(k => JSON.parse(localStorage.getItem(k))));
+  return page.evaluate(() => Object.keys(localStorage).filter(k => k.startsWith('user-stories:project:')).map(k => JSON.parse(localStorage.getItem(k)).data));
 }
 
 /** Download auslösen und Inhalt lesen. */

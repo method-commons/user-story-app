@@ -2,6 +2,8 @@
 
 Ein Projekt wird als JSON gespeichert (localStorage-Schlüssel `user-stories:project:<id>`) und exportiert. Beim Laden und Import normalisiert `Model.normalize` die Daten: fehlende Felder werden ergänzt, unbekannte entfallen, ungültige Werte und Verweise werden bereinigt, doppelte IDs neu vergeben.
 
+Im localStorage liegt jedes Projekt in einer Hülle `{ "savedAt": <Zeitpunkt in ms>, "data": <Projekt> }` – wie in den anderen Methoden-Apps, als Grundlage für die geplante gemeinsame Ablage ([method-commons/sync](https://github.com/method-commons/sync/blob/main/docs/KONZEPT.md)). Ältere Einträge ohne Hülle werden weiter gelesen und beim nächsten Speichern umgestellt. Export, Sicherung und Beispiele enthalten nur das Projekt selbst.
+
 ## Projekt (Version 1)
 
 ```json

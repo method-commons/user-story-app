@@ -50,7 +50,7 @@ Auf `main` veröffentlicht die CI die App auf GitHub Pages, sobald alle Prüfung
 | `js/model.js` | Datenmodell, Normalisieren, Standardformat (Satz bilden/zerlegen) |
 | `js/invest.js` | INVEST-Prüfung, Definition of Ready/Done, Prüfungen beim Statuswechsel |
 | `js/ops.js` | Änderungen (Stories, Abhängigkeiten, Aufteilen, Epics, Skala) und Kennzahlen |
-| `js/storage.js` | Speicherung im localStorage |
+| `js/storage.js` | Speicherung im localStorage (`{ savedAt, data }` je Projekt, `readDoc`/`writeDoc`/`listDocs` wie in den anderen Methoden-Apps) |
 | `js/io.js` | JSON-Export/-Import, Sicherung, Markdown-Bericht |
 | `js/examples.js`, `examples/` | Beispielprojekt je Sprache |
 | `js/texts.js`, `js/i18n/` | Texte (Deutsch maßgeblich, Englisch gleiche Struktur) |

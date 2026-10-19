@@ -118,7 +118,7 @@ function ProjectCard({ p }) {
     title: Texts.home.deleteTitle, text: fill(Texts.home.deleteText, { name: p.name, n: st.count }), ok: Texts.ui.delete, danger: true,
     onOk: () => {
       const copy = JSON.stringify(p);
-      Store.removeProject(p.id);
+      Store.removeDoc(p.id);
       render();
       toast(fill(Texts.home.deleted, { name: p.name }), { label: Texts.ui.undo, run: () => { Store.save(JSON.parse(copy)); render(); } });
     },

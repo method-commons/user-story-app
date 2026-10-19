@@ -31,14 +31,14 @@ describe('Store', () => {
     expect(Store.load('fehlt')).toBeNull();
     expect(Store.load('kaputt')).toBeNull();
     expect(Store.all().map(p => p.name)).toEqual(['B', 'A']);
-    Store.removeProject(a.id);
+    Store.removeDoc(a.id);
     expect(Store.all().map(p => p.name)).toEqual(['B']);
   });
 
   it('erkennt Projekt-Schlüssel', () => {
-    expect(Store.projectIdOfKey(Store.PREFIX + 'abc')).toBe('abc');
-    expect(Store.projectIdOfKey('x')).toBeNull();
-    expect(Store.projectIdOfKey(null)).toBeNull();
+    expect(Store.docIdFromKey(Store.PREFIX + 'abc')).toBe('abc');
+    expect(Store.docIdFromKey('x')).toBeNull();
+    expect(Store.docIdFromKey(null)).toBeNull();
   });
 
   it('merkt Einstellungen', () => {
@@ -57,7 +57,24 @@ describe('Store', () => {
     expect(Store.save(p)).toBe(false);
     expect(Store.load(p.id)).toBeNull();
     expect(Store.all()).toEqual([]);
-    Store.removeProject(p.id);
+    Store.removeDoc(p.id);
     expect(Store.loadPrefs()).toEqual(Store.DEFAULT_PREFS);
+  });
+
+  it('speichert { savedAt, data } und liest ältere Einträge ohne Hülle', () => {
+    const neu = Model.createProject({ name: 'Neu' });
+    expect(Store.writeDoc(neu.id, neu, 1000)).toBe(true);
+    expect(JSON.parse(localStorage.getItem(Store.PREFIX + neu.id))).toEqual({ savedAt: 1000, data: neu });
+    expect(Store.readDoc(neu.id)).toEqual({ id: neu.id, savedAt: 1000, data: neu });
+    const alt = Model.createProject({ name: 'Alt' });
+    alt.updatedAt = '2026-03-01T00:00:00.000Z';
+    localStorage.setItem(Store.PREFIX + alt.id, JSON.stringify(alt));
+    expect(Store.readDoc(alt.id)).toEqual({ id: alt.id, savedAt: Date.parse(alt.updatedAt), data: alt });
+    expect(Store.listDocs().map(d => d.data.name)).toEqual(['Alt', 'Neu']);
+    expect(Store.docIdFromKey(Store.PREFIX + alt.id)).toBe(alt.id);
+    Store.save(alt);
+    expect(JSON.parse(localStorage.getItem(Store.PREFIX + alt.id)).data).toEqual(alt);
+    Store.removeDoc(alt.id);
+    expect(Store.readDoc(alt.id)).toBeNull();
   });
 });
