@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import { test, expect, createProject, openExample, storedProjects } from './fixtures.js';
+import { APP, REPO, fakeGitHub } from './github.js';
 
 /** Menü „Datei“ öffnen und Eintrag wählen. */
 async function menu(page, action) {
@@ -12,58 +13,7 @@ async function menu(page, action) {
  * auf dem aktuellen Stand – wie das echte Repo. Ein „anderes Gerät“ schreibt direkt in `gh.files`.
  */
 
-const APP = 'user-story-app';
 const PREFIX = 'user-stories:project:';
-const REPO = 'team/methoden';
-const CORS = {
-  'access-control-allow-origin': '*',
-  'access-control-allow-headers': 'authorization, content-type, x-github-api-version, accept',
-  'access-control-allow-methods': 'GET, PUT, DELETE',
-};
-
-async function fakeGitHub(page, { files = {} } = {}) {
-  const gh = { files: new Map(), messages: [], n: 0, requests: 0 };
-  gh.write = (path, record) => gh.files.set(path, { sha: `sha${++gh.n}`, text: JSON.stringify(record, null, 2) });
-  gh.read = path => (gh.files.has(path) ? JSON.parse(gh.files.get(path).text) : null);
-  for (const [path, record] of Object.entries(files)) gh.write(path, record);
-
-  await page.route('https://api.github.com/**', async route => {
-    gh.requests++;
-    const req = route.request();
-    const method = req.method();
-    const url = new URL(req.url());
-    const json = (status, body) => route.fulfill({ status, headers: { ...CORS, 'content-type': 'application/json' }, body: JSON.stringify(body) });
-    if (method === 'OPTIONS') return route.fulfill({ status: 204, headers: CORS });
-    if (req.headers().authorization !== 'Bearer github_pat_test') return json(401, { message: 'Bad credentials' });
-    if (url.pathname === `/repos/${REPO}`) return json(200, { full_name: REPO, private: true });
-    const m = url.pathname.match(new RegExp(`^/repos/${REPO}/contents/(.+)$`));
-    if (!m) return json(404, { message: 'Not Found' });
-    const path = decodeURIComponent(m[1]);
-    const cur = gh.files.get(path);
-    if (method === 'GET') {
-      if (cur) return json(200, { type: 'file', sha: cur.sha, content: Buffer.from(cur.text).toString('base64') });
-      const dir = [...gh.files].filter(([p]) => p.startsWith(`${path}/`)).map(([p, f]) => ({ type: 'file', name: p.slice(path.length + 1), sha: f.sha }));
-      return dir.length ? json(200, dir) : json(404, { message: 'Not Found' });
-    }
-    const body = JSON.parse(req.postData() || '{}');
-    if (method === 'PUT') {
-      if (cur && body.sha !== cur.sha) return json(cur && !body.sha ? 422 : 409, { message: 'sha does not match' });
-      const sha = `sha${++gh.n}`;
-      gh.files.set(path, { sha, text: Buffer.from(body.content, 'base64').toString('utf8') });
-      gh.messages.push(body.message);
-      return json(cur ? 200 : 201, { content: { sha } });
-    }
-    if (method === 'DELETE') {
-      if (!cur) return json(404, { message: 'Not Found' });
-      if (body.sha !== cur.sha) return json(409, { message: 'sha does not match' });
-      gh.files.delete(path);
-      gh.messages.push(body.message);
-      return json(200, {});
-    }
-    return json(405, {});
-  });
-  return gh;
-}
 
 const fileOf = id => `${APP}/${id}.json`;
 /** ID einer gespeicherten Matrix anhand ihres Namens. */

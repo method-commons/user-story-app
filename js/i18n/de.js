@@ -28,12 +28,14 @@ export const TextsDe = {
     settings: 'Projekteinstellungen',
     help: 'Methodik-Hilfe',
     storage: 'Ablage …',
+    versions: 'Versionen …',
     language: 'Sprache',
   },
   // Ablage (method-commons/sync); die übrigen Texte liefert der gemeinsame Kern
   sync: {
     notSet: 'nicht eingerichtet',
     storage: 'Ablage',
+    previewLocked: 'Früherer Stand – nur ansehen. Zum Bearbeiten „Zurück zum aktuellen Stand“ wählen.',
     nouns: { one: 'Projekt', many: 'Projekte', list: 'Alle Projekte' },
     summary: '{n} Stories',
   },
