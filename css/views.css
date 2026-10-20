@@ -43,7 +43,7 @@
   .side h3 { margin: 0 0 6px; }
   .quick { display: flex; align-items: center; gap: 8px; padding: 6px 6px 6px 12px; margin-bottom: 14px; }
   .quick-icon { color: var(--muted); }
-  .quick-input { flex: 1; border: 0; background: transparent; min-height: 34px; outline: none; font-size: 14.5px; }
+  .quick-input { flex: 1; min-width: 0; border: 0; background: transparent; min-height: 34px; outline: none; font-size: 14.5px; }
   .quick:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
   .group { margin-bottom: 14px; overflow: hidden; }
   .group-head { display: flex; align-items: center; gap: 10px; padding: 9px 14px; background: var(--surface-2); border-bottom: 1px solid var(--border); font-weight: 650; }
