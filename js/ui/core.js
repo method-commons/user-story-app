@@ -119,6 +119,9 @@ export function scheduleSave() {
   saveTimer = setTimeout(flushSave, 300);
 }
 
+/** Gibt es Eingaben, die noch nicht gespeichert sind (verzögertes Speichern läuft)? */
+export const hasPendingSave = () => saveTimer != null;
+
 /** Ausstehendes Speichern sofort ausführen. */
 export function flushSave() {
   if (!saveTimer) return;
@@ -142,6 +145,24 @@ export function setStorageFailedText(t) { storageFailedText = t; }
 export function replaceProject(p) {
   project = p;
   render();
+}
+
+/**
+ * Gespeicherten Stand übernehmen, nachdem ein anderer Browser-Tab (oder die Ablage) das Projekt
+ * geändert hat: geöffnete Projekt neu laden – außer während einer Texteingabe –, sonst die Übersicht.
+ * `force`: auch während einer Texteingabe (die Ablage übernimmt nur ohne ungespeicherte Eingaben).
+ * @param {string} id @param {boolean} [force]
+ */
+export function adoptStored(id, force = false) {
+  if (project && project.id === id) {
+    const doc = Store.load(id);
+    if (!doc) { applyRoute(); return; }
+    const active = document.activeElement;
+    if (!force && active && /^(INPUT|TEXTAREA)$/.test(active.tagName)) return;
+    replaceProject(doc);
+  } else if (route.value.view === 'home') {
+    render();
+  }
 }
 
 // ===== Änderungen und Verlauf =====

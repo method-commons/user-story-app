@@ -15,6 +15,7 @@ import { Home } from './home.jsx';
 import { Report } from './report.jsx';
 import { Settings } from './settings.jsx';
 import { StoryEditor } from './story.jsx';
+import { openStorage, SyncStatus, syncMenuHint } from './sync.jsx';
 
 /** @param {string} lang */
 function switchLanguage(lang) {
@@ -49,6 +50,8 @@ function Menu() {
             <button type="button" role="menuitem" data-action="settings" onClick={run(() => go({ view: 'project', pid: p.id, tab: 'settings' }))}>{Texts.menu.settings}</button>
             <hr />
           </>}
+          <button type="button" role="menuitem" data-action="storage" class="menu-split" onClick={run(openStorage)}>{Texts.menu.storage}<span class="menu-hint" id="storageHint">{syncMenuHint()}</span></button>
+          <hr />
           <button type="button" role="menuitem" data-action="help" onClick={run(() => openHelp())}>{Texts.menu.help}</button>
           <hr />
           <div class="menu-label">{Texts.menu.language}</div>
@@ -101,6 +104,7 @@ function Header() {
         <button type="button" class="icon-btn" id="redoBtn" title={Texts.ui.redo} aria-label={Texts.ui.redo} disabled={!canRedo()} onClick={redo}>↷</button>
       </>}
       <button type="button" class="btn ghost" id="helpBtn" onClick={() => openHelp()}>? <span class="hide-narrow">{Texts.ui.method}</span></button>
+      <SyncStatus />
       <Menu />
     </header>
   );

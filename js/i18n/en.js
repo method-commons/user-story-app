@@ -28,7 +28,15 @@ export const TextsEn = {
     exportJson: 'Export project (JSON)',
     settings: 'Project settings',
     help: 'Method guide',
+    storage: 'Storage …',
     language: 'Language',
+  },
+  // Storage (method-commons/sync); all other texts come from the shared core
+  sync: {
+    notSet: 'not set up',
+    storage: 'storage',
+    nouns: { one: 'project', many: 'projects', list: 'All projects' },
+    summary: '{n} stories',
   },
 
   nav: {

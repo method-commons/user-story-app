@@ -31,6 +31,15 @@ npx vite build && npx playwright test [datei]   # E2E gegen den Build (Port 4173
 - **Texte** nur in `js/i18n/de.js` (maßgeblich) und `en.js` (gleiche Struktur und Platzhalter, wird geprüft).
 - **Beispiele** `examples/food-truck.{de,en}.json` müssen exakt der Ausgabe von `Model.normalize` entsprechen.
 
+## Ablage (method-commons/sync)
+
+- Abhängigkeit `@method-commons/sync` über `git+https://github.com/method-commons/sync.git#<Tag oder Commit>` (nicht `github:` – npm schreibt sonst `git+ssh` ins Lockfile, das scheitert in der CI). Neue Version des Kerns: `package.json` und Lockfile anheben.
+- Fest eingebunden nur `@method-commons/sync/config`; Kern, Oberfläche und Stile lädt `loadSync()` in `js/ui/sync.jsx` erst bei Bedarf.
+- Änderungen meldet die Speicherschicht (`Store.observe`: Schreiben und Löschen) – auch Import, Duplizieren, Beispiele.
+- Übernahmen aus der Ablage: abgelehnt, solange die geöffnete Datei ungespeicherte Eingaben hat (`hasPendingSave`, dann meldet der Kern einen Konflikt), sonst sofort angezeigt (`adoptStored(id, true)`).
+- `resolve.dedupe: ['preact']` in `vite.config.js` – sonst zwei Preact-Instanzen (Hooks der Oberfläche brechen).
+- E2E: `tests/e2e/sync.spec.js` bildet die GitHub-API mit `page.route` nach (Dateien mit `sha`); `tests/e2e/tabs.spec.js` prüft die Übernahme aus einem anderen Browser-Tab.
+
 ## Fallstricke
 
 - **Werte vor `setState`/`mutate` lesen:** Das Neuzeichnen ist synchron; ein kontrolliertes Feld hat danach schon den alten Wert.

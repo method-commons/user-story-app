@@ -5,6 +5,8 @@ export default defineConfig({
   base: './',
   // JSX der Oberfläche für Preact übersetzen (js/ui/*.jsx)
   oxc: { jsx: { runtime: 'automatic', importSource: 'preact' } },
+  // Eine Preact-Instanz, auch für @method-commons/sync (Komponenten der Ablage)
+  resolve: { dedupe: ['preact'] },
   build: {
     target: 'es2022',
     outDir: 'dist',

@@ -40,6 +40,7 @@ Auf `main` veröffentlicht die CI die App auf GitHub Pages, sobald alle Prüfung
 - **Bericht:** alle Stories als Karten mit Kriterien und INVEST – zum Drucken/als PDF oder als Markdown.
 - **Methodik-Hilfe** (Knopf „? Methodik“ und kontextbezogene „Mehr dazu“-Links): Standardformat, 3Cs, INVEST, Akzeptanzkriterien, Ready & Done, Aufteilen, Ablauf.
 - **Speichern** automatisch im Browser (localStorage), Rückgängig/Wiederholen (Knöpfe bzw. `Strg+Z` / `Strg+Umschalt+Z` außerhalb von Textfeldern), Export/Import je Projekt als JSON (vorhandene identische Projekte werden übersprungen, abweichende als Kopie angelegt), Sicherung aller Projekte als eine JSON-Datei. Änderungen aus einem anderen Browser-Tab werden übernommen.
+- **Ablage (optional):** Unter **Datei → Ablage …** lassen sich die Projekte zusätzlich in einem eigenen, privaten **GitHub-Repo** speichern – auf allen Geräten verfügbar, jeder übertragene Stand ein Commit. Einrichtung in drei Schritten (Repo, fine-grained Token nur für dieses Repo, Prüfung und Auswahl zum Hochladen; nie bearbeitete Dokumente wie frisch geöffnete Beispiele sind nicht vorausgewählt). Gearbeitet wird weiter im Browser; die App gleicht im Hintergrund ab (neue Dokumente sofort, Änderungen höchstens alle 5 Minuten, sofort über „Jetzt übertragen“), übernimmt Änderungen anderer Geräte und fragt bei Konflikten nach („Beide behalten“, „Meine behalten“, „Ablage übernehmen“). Die Anzeige neben „Datei“ zeigt den Zustand, die Startseite („Meine Projekte“) den Zustand je Dokument und Dokumente, die nur in der Ablage liegen. Die Ablage gilt für alle Methoden-Apps in diesem Browser und kommt aus dem gemeinsamen Kern [method-commons/sync](https://github.com/method-commons/sync); ohne Ablage wird davon nichts geladen.
 - **Beispiel** „Food-Truck Bestell-App“ (Deutsch und Englisch) mit typischen Stärken und Schwächen.
 - **Sprachen:** Deutsch und Englisch (Menü „Datei“). Hell/dunkel nach Systemeinstellung, mobil mit Navigation unten.
 
@@ -51,6 +52,7 @@ Auf `main` veröffentlicht die CI die App auf GitHub Pages, sobald alle Prüfung
 | `js/invest.js` | INVEST-Prüfung, Definition of Ready/Done, Prüfungen beim Statuswechsel |
 | `js/ops.js` | Änderungen (Stories, Abhängigkeiten, Aufteilen, Epics, Skala) und Kennzahlen |
 | `js/storage.js` | Speicherung im localStorage (`{ savedAt, data }` je Projekt, `readDoc`/`writeDoc`/`listDocs` wie in den anderen Methoden-Apps) |
+| `js/ui/sync.jsx` | Ablage: Bindeglied zum gemeinsamen Kern [`@method-commons/sync`](https://github.com/method-commons/sync) (Adapter, Laden erst bei Bedarf, Statusanzeige, Menü „Ablage …“, Zustand auf der Startseite) |
 | `js/io.js` | JSON-Export/-Import, Sicherung, Markdown-Bericht |
 | `js/examples.js`, `examples/` | Beispielprojekt je Sprache |
 | `js/texts.js`, `js/i18n/` | Texte (Deutsch maßgeblich, Englisch gleiche Struktur) |
