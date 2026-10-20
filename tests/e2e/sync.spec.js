@@ -150,18 +150,30 @@ test('Startseite: Zustand je Matrix, „Nur in der Ablage“ öffnen, Löschen, 
   expect(await idOf(page, 'Hier')).toBeTruthy();
 });
 
-test('mobil: „Datei“ bleibt mit Statusanzeige und langem Titel rechts, das Menü im Bild', async ({ page }) => {
-  await fakeGitHub(page);
-  await createProject(page, 'Food-Truck – Bestellung und Abholung per App');
-  await (await connect(page)).locator('[data-sync="finish"]').click();
-  await expect(page.locator('#syncStatus')).toHaveAttribute('data-status', /ok|pending|busy/);
+/** „Datei“ sitzt rechts, sein Menü liegt ganz im Bild, nichts verschiebt die Seite waagerecht (320–430 px). */
+async function checkMenu(page, where) {
   for (const width of [430, 390, 360, 320]) {
     await page.setViewportSize({ width, height: 760 });
+    const btn = await page.locator('#menuBtn').boundingBox();
+    expect(btn.x + btn.width, `„Datei“ rechts: ${where}, ${width} px`).toBeGreaterThan(width - 40);
     await page.click('#menuBtn');
     const list = await page.locator('.menu-list').boundingBox();
-    expect(list.x, `Menü bei ${width} px`).toBeGreaterThanOrEqual(0);
+    expect(list.x, `Menü: ${where}, ${width} px`).toBeGreaterThanOrEqual(0);
     expect(list.x + list.width).toBeLessThanOrEqual(width);
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
     await page.click('#menuBtn'); // wieder schließen
   }
+}
+
+test('mobil: „Datei“ bleibt mit Statusanzeige rechts, das Menü im Bild (langer und kurzer Titel, Übersicht)', async ({ page }) => {
+  await fakeGitHub(page);
+  await createProject(page, 'Food-Truck – Bestellung und Abholung per App');
+  await (await connect(page)).locator('[data-sync="finish"]').click();
+  await expect(page.locator('#syncStatus')).toHaveAttribute('data-status', /ok|pending|busy/);
+  await checkMenu(page, 'langer Titel');
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await rename(page, 'App');
+  await checkMenu(page, 'kurzer Titel');
+  await page.evaluate(() => { location.hash = '#/'; }); // Übersicht
+  await checkMenu(page, 'Übersicht');
 });
