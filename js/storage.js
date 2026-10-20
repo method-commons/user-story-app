@@ -28,34 +28,61 @@ export const Store = (() => {
     try { return Object.keys(localStorage); } catch (e) { return []; }
   }
 
-  /** Projekt laden (normalisiert), `null` wenn nicht vorhanden oder beschädigt. @param {string} id @returns {Project | null} */
-  function load(id) {
+  /** @typedef {{ id: string, savedAt: number, data: Project }} StoredDoc */
+
+  /**
+   * Eintrag lesen (normalisiert), `null` wenn nicht vorhanden oder beschädigt. Gespeichert wird
+   * `{ savedAt, data }` wie in den anderen Methoden-Apps; ältere Einträge (Projekt direkt) werden
+   * ebenso gelesen und beim nächsten Speichern umgestellt.
+   * @param {string} id @returns {StoredDoc | null}
+   */
+  function readDoc(id) {
     const raw = get(PREFIX + id);
     if (!raw) return null;
-    try { return Model.normalize(JSON.parse(raw)); } catch (e) { return null; }
+    try {
+      const rec = JSON.parse(raw);
+      const wrapped = rec != null && typeof rec === 'object' && 'savedAt' in rec && 'data' in rec;
+      const data = Model.normalize(wrapped ? rec.data : rec);
+      return { id, savedAt: (wrapped ? Number(rec.savedAt) : Date.parse(data.updatedAt)) || 0, data };
+    } catch (e) { return null; }
+  }
+
+  /** @param {string} id @param {Project} data @param {number} [savedAt] z. B. beim Übernehmen aus einer Ablage @returns {boolean} */
+  function writeDoc(id, data, savedAt = Date.now()) {
+    return set(PREFIX + id, JSON.stringify({ savedAt, data }));
+  }
+
+  /** @param {string} id */
+  function removeDoc(id) {
+    remove(PREFIX + id);
+  }
+
+  /** ID eines Projekts zu einem Speicherschlüssel (z. B. aus einem `storage`-Ereignis), sonst `null`. @param {string | null} key */
+  function docIdFromKey(key) {
+    return key && key.startsWith(PREFIX) ? key.slice(PREFIX.length) : null;
+  }
+
+  /** Alle gespeicherten Einträge, zuletzt gespeicherte zuerst. @returns {StoredDoc[]} */
+  function listDocs() {
+    return keys().filter(k => k.startsWith(PREFIX))
+      .map(k => readDoc(k.slice(PREFIX.length)))
+      .filter(/** @returns {d is StoredDoc} */ d => d != null)
+      .sort((x, y) => y.savedAt - x.savedAt);
+  }
+
+  /** Projekt laden, `null` wenn nicht vorhanden oder beschädigt. @param {string} id @returns {Project | null} */
+  function load(id) {
+    return readDoc(id)?.data ?? null;
   }
 
   /** Projekt speichern. @param {Project} p @returns {boolean} */
   function save(p) {
-    return set(PREFIX + p.id, JSON.stringify(p));
-  }
-
-  /** @param {string} id */
-  function removeProject(id) {
-    remove(PREFIX + id);
+    return writeDoc(p.id, p);
   }
 
   /** Alle gespeicherten Projekte, zuletzt bearbeitete zuerst. @returns {Project[]} */
   function all() {
-    return keys().filter(k => k.startsWith(PREFIX))
-      .map(k => load(k.slice(PREFIX.length)))
-      .filter(/** @returns {p is Project} */ p => p != null)
-      .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
-  }
-
-  /** Ist der Speicherschlüssel der eines Projekts? Liefert die ID. @param {string | null} key */
-  function projectIdOfKey(key) {
-    return key && key.startsWith(PREFIX) ? key.slice(PREFIX.length) : null;
+    return listDocs().map(d => d.data).sort((x, y) => y.updatedAt.localeCompare(x.updatedAt));
   }
 
   /** @type {Prefs} */
@@ -77,5 +104,5 @@ export const Store = (() => {
     set(PREFS_KEY, JSON.stringify(prefs));
   }
 
-  return { PREFIX, load, save, removeProject, all, projectIdOfKey, loadPrefs, savePrefs, DEFAULT_PREFS };
+  return { PREFIX, readDoc, writeDoc, removeDoc, docIdFromKey, listDocs, load, save, all, loadPrefs, savePrefs, DEFAULT_PREFS };
 })();

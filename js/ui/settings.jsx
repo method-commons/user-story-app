@@ -40,7 +40,7 @@ export function Settings() {
     onOk: () => {
       const copy = JSON.stringify(p);
       discardProject();
-      Store.removeProject(p.id);
+      Store.removeDoc(p.id);
       go({ view: 'home' });
       toast(fill(Texts.home.deleted, { name: p.name }), { label: Texts.ui.undo, run: () => { Store.save(JSON.parse(copy)); go({ view: 'project', pid: JSON.parse(copy).id, tab: 'backlog' }); } });
     },
