@@ -149,3 +149,19 @@ test('Startseite: Zustand je Matrix, „Nur in der Ablage“ öffnen, Löschen, 
   expect(await page.evaluate(() => [localStorage.getItem('method-commons:sync:token'), localStorage.getItem('method-commons:sync:config')])).toEqual([null, null]);
   expect(await idOf(page, 'Hier')).toBeTruthy();
 });
+
+test('mobil: „Datei“ bleibt mit Statusanzeige und langem Titel rechts, das Menü im Bild', async ({ page }) => {
+  await fakeGitHub(page);
+  await createProject(page, 'Food-Truck – Bestellung und Abholung per App');
+  await (await connect(page)).locator('[data-sync="finish"]').click();
+  await expect(page.locator('#syncStatus')).toHaveAttribute('data-status', /ok|pending|busy/);
+  for (const width of [430, 390, 360, 320]) {
+    await page.setViewportSize({ width, height: 760 });
+    await page.click('#menuBtn');
+    const list = await page.locator('.menu-list').boundingBox();
+    expect(list.x, `Menü bei ${width} px`).toBeGreaterThanOrEqual(0);
+    expect(list.x + list.width).toBeLessThanOrEqual(width);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
+    await page.click('#menuBtn'); // wieder schließen
+  }
+});
