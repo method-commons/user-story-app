@@ -14,7 +14,7 @@
   .intro { padding: 22px; max-width: 760px; }
   .intro-list { margin: 0 0 16px; padding-left: 20px; color: var(--text-2); }
   .intro-list li { margin: 4px 0; }
-  .projects { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; }
+  .projects { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(320px, 100%), 1fr)); gap: 16px; }
   .proj { padding: 16px; display: flex; flex-direction: column; gap: 12px; position: relative; }
   .proj-head { display: flex; gap: 12px; align-items: flex-start; }
   .proj-title { min-width: 0; }
@@ -31,7 +31,7 @@
   .meta div { background: var(--surface-2); border-radius: 8px; padding: 8px 10px; }
   .meta b { display: block; font-size: 17px; }
   .meta small { color: var(--muted); font-size: 11.5px; }
-  .proj-actions { display: flex; gap: 4px; justify-content: flex-end; margin-top: -6px; position: relative; z-index: 1; }
+  .proj-actions { display: flex; flex-wrap: wrap; gap: 4px; justify-content: flex-end; margin-top: -6px; position: relative; z-index: 1; }
   .proj.new { border: 2px dashed var(--border-strong); border-radius: var(--radius); background: transparent; align-items: center; justify-content: center; color: var(--muted); min-height: 220px; font-weight: 600; cursor: pointer; font-size: 15px; }
   .proj.new small { font-weight: 500; font-size: 12px; }
   .proj.new:hover { border-color: var(--accent); color: var(--accent); }
