@@ -68,6 +68,7 @@ const HISTORY_LIMIT = 200;
 /** Route aus dem Hash übernehmen und das passende Projekt laden. */
 export function applyRoute() {
   const r = parseHash(location.hash);
+  if (preview && !(r.view !== 'home' && r.pid === project?.id)) endPreview(); // anderes Dokument: Ansehen beenden
   if (r.view !== 'home') {
     if (!project || project.id !== r.pid) {
       flushSave();
@@ -115,6 +116,7 @@ let saveTimer = null;
 
 /** Gleich speichern (nach kurzer Pause gebündelt). */
 export function scheduleSave() {
+  if (preview) return; // früherer Stand: nur ansehen
   if (saveTimer) clearTimeout(saveTimer);
   saveTimer = setTimeout(flushSave, 300);
 }
@@ -157,12 +159,48 @@ export function adoptStored(id, force = false) {
   if (project && project.id === id) {
     const doc = Store.load(id);
     if (!doc) { applyRoute(); return; }
+    if (preview) { preview.saved = doc; return; } // gilt nach dem Ansehen
     const active = document.activeElement;
     if (!force && active && /^(INPUT|TEXTAREA)$/.test(active.tagName)) return;
     replaceProject(doc);
   } else if (route.value.view === 'home') {
     render();
   }
+}
+
+// ===== Früherer Stand (Versionen der Ablage) =====
+/** Wird ein früherer Stand angesehen? Dann ist der aktuelle in `saved` geparkt. @type {{ saved: any } | null} */
+let preview = null;
+/** Meldung bei gesperrtem Bearbeiten und Ende des Ansehens (aus sync.jsx). */
+let previewHooks = { locked: '', ended: () => {} };
+/** @param {{ locked: string, ended: () => void }} hooks */
+export function setPreviewHooks(hooks) { previewHooks = hooks; }
+export const isPreview = () => preview !== null;
+
+/** Bearbeiten ist gesperrt, solange ein früherer Stand gezeigt wird (mit Hinweis). */
+function blockedByPreview() {
+  if (!preview) return false;
+  toast(previewHooks.locked);
+  render();
+  return true;
+}
+
+/** Früheren Stand des geöffneten Dokuments nur lesend zeigen. @param {any} data */
+export function showPreview(data) {
+  if (!project) return;
+  commitEdit();
+  flushSave();
+  preview ??= { saved: project };
+  replaceProject(data);
+}
+
+/** Zurück zum aktuellen Stand (auch vor dem Wechsel zu einem anderen Dokument). */
+export function endPreview() {
+  if (!preview || !project) { preview = null; return; }
+  const saved = Store.load(project.id) ?? preview.saved;
+  preview = null;
+  replaceProject(saved);
+  previewHooks.ended();
 }
 
 // ===== Änderungen und Verlauf =====
@@ -182,6 +220,7 @@ function pushUndo(snap) {
  */
 export function mutate(fn) {
   if (!project) return undefined;
+  if (blockedByPreview()) return undefined;
   commitEdit();
   const before = JSON.stringify(project);
   const result = fn(project);
@@ -212,8 +251,12 @@ export function fieldProps(get, set) {
     value: get(),
     onFocus: () => { if (project && editSnapshot == null) editSnapshot = JSON.stringify(project); },
     /** @param {Event} e */
+    // früherer Stand: Tippen gar nicht erst zulassen
+    /** @param {Event} e */
+    onBeforeInput: e => { if (preview) { e.preventDefault(); blockedByPreview(); } },
+    /** @param {Event} e */
     onInput: e => {
-      if (!project) return;
+      if (!project || preview) return;
       if (editSnapshot == null) editSnapshot = JSON.stringify(project);
       set(/** @type {HTMLInputElement} */ (e.currentTarget).value);
       Ops.touch(project);
@@ -228,6 +271,7 @@ export const canUndo = () => undoStack.length > 0 || editSnapshot != null;
 export const canRedo = () => redoStack.length > 0;
 
 export function undo() {
+  if (blockedByPreview()) return;
   commitEdit();
   if (!project || !undoStack.length) return;
   redoStack.push(JSON.stringify(project));
@@ -236,6 +280,7 @@ export function undo() {
 }
 
 export function redo() {
+  if (blockedByPreview()) return;
   commitEdit();
   if (!project || !redoStack.length) return;
   undoStack.push(JSON.stringify(project));

@@ -29,12 +29,14 @@ export const TextsEn = {
     settings: 'Project settings',
     help: 'Method guide',
     storage: 'Storage …',
+    versions: 'Versions …',
     language: 'Language',
   },
   // Storage (method-commons/sync); all other texts come from the shared core
   sync: {
     notSet: 'not set up',
     storage: 'storage',
+    previewLocked: 'Earlier state – view only. Choose “Back to current state” to edit.',
     nouns: { one: 'project', many: 'projects', list: 'All projects' },
     summary: '{n} stories',
   },
