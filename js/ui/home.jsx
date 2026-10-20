@@ -12,6 +12,7 @@ import { Util } from '../util.js';
 import { Dialog, StatusBar, confirmDialog, download, fill, pickFile } from './components.jsx';
 import { closeDialog, go, openDialog, render, toast, useRevision } from './core.js';
 import { openHelp } from './help.jsx';
+import { SyncDocState, SyncRemoteOnly } from './sync.jsx';
 
 /** Projekt speichern und öffnen. @param {Project} p */
 function openNew(p) {
@@ -145,6 +146,7 @@ function ProjectCard({ p }) {
       </div>}
       <div class={`hint ${hint.cls}`}>{hint.text}</div>
       <div class="proj-actions">
+        <SyncDocState id={p.id} />
         <button type="button" class="btn sm ghost" onClick={() => download(IO.projectJson(p), Util.fileName(p.name, 'json'), 'application/json')}>{Texts.home.export}</button>
         <button type="button" class="btn sm ghost danger-text" data-delete={p.id} onClick={remove}>{Texts.ui.delete}</button>
       </div>
@@ -193,6 +195,8 @@ export function Home() {
         {list.map(p => <ProjectCard key={p.id} p={p} />)}
         <button type="button" class="proj new" onClick={newProjectDialog}>+ {Texts.home.newProject}<small>{Texts.home.newProjectHint}</small></button>
       </div>}
+
+      <SyncRemoteOnly />
 
       {recent.length > 0 && (
         <section class="card pad recent">

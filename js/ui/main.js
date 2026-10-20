@@ -6,6 +6,7 @@ import { Component, h, options, render as preactRender } from 'preact';
 import { Store } from '../storage.js';
 import { Languages, Texts } from '../texts.js';
 import { App } from './app.jsx';
+import { initSync } from './sync.jsx';
 import { adoptStored, applyRoute, commitEdit, dialog, flushSave, redo, setStorageFailedText, undo } from './core.js';
 
 // Synchron neu zeichnen: Eingaben, Fokus und Tests sehen sofort den neuen Stand.
@@ -41,5 +42,6 @@ document.addEventListener('keydown', e => {
   else if (mod && e.key.toLowerCase() === 'y') { e.preventDefault(); redo(); }
 });
 
+initSync();
 applyRoute();
 preactRender(h(App, {}), /** @type {HTMLElement} */ (document.getElementById('app')));

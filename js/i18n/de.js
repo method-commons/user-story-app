@@ -27,7 +27,15 @@ export const TextsDe = {
     exportJson: 'Projekt exportieren (JSON)',
     settings: 'Projekteinstellungen',
     help: 'Methodik-Hilfe',
+    storage: 'Ablage …',
     language: 'Sprache',
+  },
+  // Ablage (method-commons/sync); die übrigen Texte liefert der gemeinsame Kern
+  sync: {
+    notSet: 'nicht eingerichtet',
+    storage: 'Ablage',
+    nouns: { one: 'Projekt', many: 'Projekte', list: 'Alle Projekte' },
+    summary: '{n} Stories',
   },
 
   nav: {

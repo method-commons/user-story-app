@@ -77,4 +77,14 @@ describe('Store', () => {
     Store.removeDoc(alt.id);
     expect(Store.readDoc(alt.id)).toBeNull();
   });
+
+  it('meldet Schreiben und Löschen an einen Beobachter', () => {
+    const seen = [];
+    Store.observe({ written: id => seen.push(['w', id]), removed: id => seen.push(['r', id]) });
+    Store.writeDoc('x1', Store.readDoc('fehlt')?.data ?? {}, 1);
+    Store.removeDoc('x1');
+    Store.observe({ written: () => {}, removed: () => {} });
+    Store.removeDoc('x2');
+    expect(seen).toEqual([['w', 'x1'], ['r', 'x1']]);
+  });
 });
