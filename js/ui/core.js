@@ -144,6 +144,23 @@ export function replaceProject(p) {
   render();
 }
 
+/**
+ * Gespeicherten Stand übernehmen, nachdem ein anderer Browser-Tab (oder die Ablage) das Projekt
+ * geändert hat: geöffnete Projekt neu laden – außer während einer Texteingabe –, sonst die Übersicht.
+ * @param {string} id
+ */
+export function adoptStored(id) {
+  if (project && project.id === id) {
+    const doc = Store.load(id);
+    if (!doc) { applyRoute(); return; }
+    const active = document.activeElement;
+    if (active && /^(INPUT|TEXTAREA)$/.test(active.tagName)) return;
+    replaceProject(doc);
+  } else if (route.value.view === 'home') {
+    render();
+  }
+}
+
 // ===== Änderungen und Verlauf =====
 /** Stand vor einer Texteingabe (Verlaufseintrag beim Verlassen des Felds). @type {string | null} */
 let editSnapshot = null;

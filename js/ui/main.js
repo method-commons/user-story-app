@@ -3,11 +3,10 @@
  * Einstieg der App (in index.html als Modul eingebunden).
  */
 import { Component, h, options, render as preactRender } from 'preact';
-import { Model } from '../model.js';
 import { Store } from '../storage.js';
 import { Languages, Texts } from '../texts.js';
 import { App } from './app.jsx';
-import { applyRoute, commitEdit, dialog, flushSave, project, redo, render, replaceProject, route, setStorageFailedText, undo } from './core.js';
+import { adoptStored, applyRoute, commitEdit, dialog, flushSave, redo, setStorageFailedText, undo } from './core.js';
 
 // Synchron neu zeichnen: Eingaben, Fokus und Tests sehen sofort den neuen Stand.
 options.debounceRendering = cb => cb();
@@ -26,18 +25,10 @@ window.addEventListener('hashchange', () => { commitEdit(); dialog.value = null;
 window.addEventListener('beforeunload', () => { commitEdit(); flushSave(); });
 document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') { commitEdit(); flushSave(); } });
 
-// Änderungen aus einem anderen Browser-Tab übernehmen
+// Änderungen aus einem anderen Browser-Tab übernehmen (gespeichert als { savedAt, data }: über Store lesen)
 window.addEventListener('storage', e => {
   const id = Store.docIdFromKey(e.key);
-  if (!id) return;
-  if (project && project.id === id) {
-    if (!e.newValue) { applyRoute(); return; }
-    const active = document.activeElement;
-    if (active && /^(INPUT|TEXTAREA)$/.test(active.tagName)) return;
-    try { replaceProject(Model.normalize(JSON.parse(e.newValue))); } catch (err) { /* beschädigt: ignorieren */ }
-  } else if (route.value.view === 'home') {
-    render();
-  }
+  if (id) adoptStored(id);
 });
 
 // Rückgängig/Wiederholen außerhalb von Textfeldern (dort gilt das Rückgängig des Browsers)
