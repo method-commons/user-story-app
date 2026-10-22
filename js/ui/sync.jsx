@@ -3,7 +3,7 @@
  * Der Kern samt Oberfläche wird erst geladen, wenn eine Ablage eingerichtet ist oder jemand
  * „Ablage …“ wählt – ohne Ablage bleibt die App wie bisher (nur der Menüeintrag ist neu).
  */
-import { CONFIG_KEY, hasConfig } from '@method-commons/sync/config';
+import { CONFIG_KEY, hasConfig, sharedLink } from '@method-commons/sync/config';
 import { signal } from '@preact/signals';
 import { Model } from '../model.js';
 import { Store } from '../storage.js';
@@ -102,14 +102,15 @@ export function openShare() {
 }
 
 /**
- * Link `#g=…` eines geteilten Dokuments: nur lesend zeigen – es wird nichts gespeichert, weder im Browser noch in
- * einer eingerichteten Ablage (erst „Als Kopie speichern“). Gibt `true` zurück, wenn die Adresse ein solcher Link war.
+ * Link eines geteilten Dokuments (`#g=…` geheimes Gist, `#p=…` öffentliches Repo): nur lesend zeigen – es wird nichts
+ * gespeichert, weder im Browser noch in einer eingerichteten Ablage (erst „Als Kopie speichern“). Gibt `true` zurück,
+ * wenn die Adresse ein solcher Link war.
  */
 export function openSharedFromHash() {
-  const gist = /^#g=([0-9a-f]{8,64})$/i.exec(location.hash)?.[1];
-  if (!gist) return false;
+  const link = sharedLink(location.hash);
+  if (!link) return false;
   history.replaceState(null, '', `${location.pathname}${location.search}#/`);
-  loadSync().then(ui => ui.openShared(gist));
+  loadSync().then(ui => ui.openShared(link));
   return true;
 }
 
