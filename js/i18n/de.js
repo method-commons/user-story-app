@@ -29,6 +29,8 @@ export const TextsDe = {
     help: 'Methodik-Hilfe',
     storage: 'Ablage …',
     versions: 'Versionen …',
+    share: 'Teilen …',
+    shareHint: 'Link zum Ansehen',
     language: 'Sprache',
   },
   // Ablage (method-commons/sync); die übrigen Texte liefert der gemeinsame Kern

@@ -15,7 +15,7 @@ import { Home } from './home.jsx';
 import { Report } from './report.jsx';
 import { Settings } from './settings.jsx';
 import { StoryEditor } from './story.jsx';
-import { openStorage, openVersions, SyncPreview, SyncStatus, syncMenuHint } from './sync.jsx';
+import { openShare, openStorage, openVersions, SyncPreview, SyncStatus, syncMenuHint } from './sync.jsx';
 
 /** @param {string} lang */
 function switchLanguage(lang) {
@@ -52,6 +52,7 @@ function Menu() {
           </>}
           <button type="button" role="menuitem" data-action="storage" class="menu-split" onClick={run(openStorage)}>{Texts.menu.storage}<span class="menu-hint" id="storageHint">{syncMenuHint()}</span></button>
           {p && <button type="button" role="menuitem" data-action="versions" onClick={run(openVersions)}>{Texts.menu.versions}</button>}
+          {p && <button type="button" role="menuitem" data-action="share" class="menu-split" onClick={run(openShare)}>{Texts.menu.share}<span class="menu-hint">{Texts.menu.shareHint}</span></button>}
           <hr />
           <button type="button" role="menuitem" data-action="help" onClick={run(() => openHelp())}>{Texts.menu.help}</button>
           <hr />
