@@ -30,6 +30,8 @@ export const TextsEn = {
     help: 'Method guide',
     storage: 'Storage …',
     versions: 'Versions …',
+    share: 'Share …',
+    shareHint: 'link for viewing',
     language: 'Language',
   },
   // Storage (method-commons/sync); all other texts come from the shared core

@@ -39,7 +39,8 @@ npx vite build && npx playwright test [datei]   # E2E gegen den Build (Port 4173
 - Übernahmen aus der Ablage: abgelehnt, solange die geöffnete Datei ungespeicherte Eingaben hat (`hasPendingSave`, dann meldet der Kern einen Konflikt), sonst sofort angezeigt (`adoptStored(id, true)`).
 - `resolve.dedupe: ['preact']` in `vite.config.js` – sonst zwei Preact-Instanzen (Hooks der Oberfläche brechen).
 - **Versionen:** früherer Stand nur lesend über `showPreview`/`endPreview` (`core.js`): Speichern, `mutate`, Rückgängig und Eingaben (`beforeinput` in `fieldProps`) sind gesperrt, Wechsel zu einem anderen Dokument beendet das Ansehen, Übernahmen aus der Ablage werden solange abgelehnt.
-- E2E: `tests/e2e/github.js` bildet die GitHub-API mit `page.route` nach (Dateien mit `sha`, Commits je Datei, Tags), genutzt von `sync.spec.js` und `versions.spec.js`; `tests/e2e/tabs.spec.js` prüft die Übernahme aus einem anderen Browser-Tab.
+- **Teilen zum Ansehen:** Link `#g=<gist>` öffnet `openSharedFromHash` (`sync.jsx`, beim Start und bei `hashchange`) → `showShared` (`core.js`): eigene Route, nur lesend, **nichts wird gespeichert**; „Schließen“ führt zum vorher geöffneten Dokument bzw. zur Übersicht, erst „Als Kopie speichern“ (Kern) legt ein Dokument an.
+- E2E: `tests/e2e/github.js` bildet die GitHub-API mit `page.route` nach (Dateien mit `sha`, Commits je Datei, Tags, geheime Gists; `fakeGitHub(page, { gh })` teilt den Zustand mit einer zweiten Seite), genutzt von `sync.spec.js`, `versions.spec.js` und `share.spec.js`; `tests/e2e/tabs.spec.js` prüft die Übernahme aus einem anderen Browser-Tab.
 
 ## Fallstricke
 
