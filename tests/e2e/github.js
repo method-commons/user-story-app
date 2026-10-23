@@ -15,9 +15,10 @@ const CORS = {
 export async function fakeGitHub(page, { files = {}, gh: shared = null } = {}) {
   // `gh`: Zustand einer anderen Seite weiterverwenden (z. B. Empfänger eines geteilten Links)
   if (shared) { await route(page, shared); return shared; }
-  const gh = { files: new Map(), messages: [], n: 0, requests: 0, commits: [], refs: new Map(), tags: new Map(), gists: new Map(), gistsForbidden: false };
-  /** Commit festhalten (für die Versionen). */
-  const commit = gh.commit = (path, text, message) => gh.commits.push({ sha: `c${gh.commits.length + 1}`, path, text, message, date: new Date().toISOString() });
+  // `public`: Repo öffentlich (Teilen ohne Gist, Lesen über raw.githubusercontent.com); `org`: gehört einer Organisation
+  const gh = { files: new Map(), messages: [], n: 0, requests: 0, commits: [], refs: new Map(), tags: new Map(), gists: new Map(), gistsForbidden: false, public: false, org: false };
+  /** Commit festhalten (für die Versionen); Kennung wie bei GitHub 40 Hex-Zeichen. */
+  const commit = gh.commit = (path, text, message) => gh.commits.push({ sha: `c${String(gh.commits.length + 1).padStart(39, '0')}`, path, text, message, date: new Date().toISOString() });
   /** Datei schreiben wie ein anderes Gerät (neuer sha). */
   gh.write = (path, record, message = `${record.data?.title} (${record.device})`) => {
     const text = JSON.stringify(record, null, 2);
@@ -33,6 +34,15 @@ export async function fakeGitHub(page, { files = {}, gh: shared = null } = {}) {
 
 /** Anfragen an die GitHub-API dieser Seite auf den Zustand `gh` lenken. */
 async function route(page, gh) {
+  // Dateien öffentlicher Repos ohne Anmeldung (`HEAD` bzw. Branch: aktueller Stand, Commit: fester Stand)
+  await page.route('https://raw.githubusercontent.com/**', async route => {
+    gh.requests++;
+    const [, owner, name, ref, ...rest] = decodeURIComponent(new URL(route.request().url()).pathname).split('/');
+    const path = rest.join('/');
+    const text = !gh.public || `${owner}/${name}` !== REPO ? null
+      : /^[0-9a-f]{40}$/.test(ref) ? gh.commits.find(c => c.sha === ref && c.path === path)?.text : gh.files.get(path)?.text;
+    return route.fulfill({ status: text == null ? 404 : 200, headers: { 'access-control-allow-origin': '*', 'content-type': 'text/plain' }, body: text ?? '404: Not Found' });
+  });
   await page.route('https://api.github.com/**', async route => {
     gh.requests++;
     const req = route.request();
@@ -49,7 +59,7 @@ async function route(page, gh) {
       return json(200, { id: g.id, description: g.description, public: false, updated_at: new Date().toISOString(), files });
     }
     if (req.headers().authorization !== 'Bearer github_pat_test') return json(401, { message: 'Bad credentials' });
-    if (url.pathname === `/repos/${REPO}`) return json(200, { full_name: REPO, private: true });
+    if (url.pathname === `/repos/${REPO}`) return json(200, { full_name: REPO, private: !gh.public, owner: { login: REPO.split('/')[0], type: gh.org ? 'Organization' : 'User' } });
     if (url.pathname === '/gists' && method === 'POST') {
       if (gh.gistsForbidden) return json(403, { message: 'Resource not accessible by personal access token' });
       const body = JSON.parse(req.postData() || '{}');
